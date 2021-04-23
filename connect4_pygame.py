@@ -16,12 +16,10 @@ YELLOW = (255,255,0)
 ROW_COUNT = 6
 COLUMN_COUNT = 7
 
-PLAYER = 0
-AI = 1
+PLAYER = 1
+AI = 2
 
 EMPTY = 0
-PLAYER_PIECE = 1
-AI_PIECE = 2
 
 def create_board():
 	#board = np.zeros((ROW_COUNT,COLUMN_COUNT))
@@ -85,7 +83,7 @@ def draw_board(board):
 board = create_board()
 print_board(board)
 game_over = False
-turn = 0
+turn = PLAYER
 
 pygame.init()
 
@@ -128,15 +126,14 @@ while not game_over:
 
 				if is_valid_location(board, col):
 					row = get_next_open_row(board, col)
-					drop_piece(board, row, col, PLAYER_PIECE)
+					drop_piece(board, row, col, PLAYER)
 
-					if winning_move(board, PLAYER_PIECE):
+					if winning_move(board, PLAYER):
 						label = myfont.render("Player 1 wins!!", 1, RED)
 						screen.blit(label, (40,10))
 						game_over = True
 
-					turn += 1
-					turn = turn % 2
+					turn = AI
 
 					print_board(board)
 					draw_board(board)
@@ -163,9 +160,9 @@ while not game_over:
 			if is_valid_location(board, col):
 				pygame.time.wait(500)
 				row = get_next_open_row(board, col)
-				drop_piece(board, row, col, AI_PIECE)
+				drop_piece(board, row, col, AI)
 
-			if winning_move(board, AI_PIECE):
+			if winning_move(board, AI):
 				label = myfont.render("Player 2 wins!!", 1, YELLOW)
 				screen.blit(label, (40,10))
 				game_over = True
@@ -173,8 +170,7 @@ while not game_over:
 			print_board(board)
 			draw_board(board)
 
-			turn += 1
-			turn = turn % 2
+			turn = PLAYER
 
 	if game_over:
 		pygame.time.wait(3000)
