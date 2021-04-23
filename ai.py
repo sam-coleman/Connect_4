@@ -1,5 +1,4 @@
 """ Hold driver functions for minimax ai
-
 """
 
 import numpy as np
@@ -7,35 +6,10 @@ import pygame
 import sys
 import math
 import copy
-"""# pseudocode without alpha beta pruning
-def minimax(boardType board, bool maximizer, int depth)
-	# might make sense to check if someone has won first
-	if depth == 0: #reached max recursion depth
-		return heuristic(board), move 
-	elif maximizer == True:# we want to maximize the score
-		moves = find_moves(board) # max is 7
-		new_boards = []
-		for move in moves:
-			# make deep copy of board w/ move played
-			new_board = deep_copy(board.make_move(move))
-			new_boards.append(new_board)
-		# find max!
-		return max(minimax(new_board, false, depth -1) for new_board in new_boards)
-	else: #minimizer, aka we want to minimize the score
-		moves = find_moves(board)
-		new_boards = []
-		for move in moves:
-			# make deep copy of board w/ move played
-			new_board = deep_copy(board.make_move(move))
-			new_boards.append(new_board)
-		# find min!
-		return min(minimax(new_board, true, depth -1) for new_board in new_boards)
-
-"""
 
 def minimax(board, player, depth):#, prev_move):
     """player = 0: AI (maximizer)
-        player = 1: oponenet (minimzer)
+        player = 1: opponent (minimzer)
         prev_move: int representing last column played in
     """
     #what is move? how calculate? column?
@@ -43,7 +17,7 @@ def minimax(board, player, depth):#, prev_move):
 
     #check if someone has won
     if calc_adjacent(board, 1, 4) > 0:
-        #SUPER BAD--Lose 
+        #SUPER BAD--Lose
         return -math.inf, -1
     if calc_adjacent(board, 0, 4) > 0:
         #SUPER GOOD--Win
@@ -51,7 +25,7 @@ def minimax(board, player, depth):#, prev_move):
 
     if depth == 0: #reached max recursion
         return heuristic(board), -1
-    
+
     elif player == 0: #AI playing, maximizer
         poss_moves = find_moves(boards)
         #DO SOMETIHING IF POSS MOVES EMPTY
@@ -60,9 +34,9 @@ def minimax(board, player, depth):#, prev_move):
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             results.append((minimax(copy.deepcopy(new_board), 1, depth-1)[0], move))
-        
+
         return max(results)
-    
+
     else: #human playing, minimzer
         poss_moves = find_moves(boards)
         #DO SOMETIHING IF POSS MOVES EMPTY
@@ -71,14 +45,34 @@ def minimax(board, player, depth):#, prev_move):
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             results.append((minimax(copy.deepcopy(new_board), 0, depth-1)[0], move))
-        
-        return min(results)
-        
-def calc_heuristic(board):
-    """will prob call calc_adjacent # in a row
 
+        return min(results)
+
+def calc_heuristic(board):
+    """Our heuristic function. Returns the sum of all weights attached to
+	streaks (an integer).
+
+	We are prioritizing not having the player win the most. After that, we prioritize
+	the AI winning and an equal weight for the rest of the streaks.
     """
-    return 0
+	# AI = 0, calculating the streaks the AI has
+	our_fours = calc_adjacent(board, 0, 4)
+	our_threes = calc_adjacent(board, 0, 3)
+	our_twos = calc_adjacent(board, 0, 2)
+
+	# player = 1, calculating the streaks that the player has
+	enemy_fours = calc_adjacent(board, 1, 4)
+	enemy_threes = calc_adjacent(board, 1, 3)
+	enemy_twos = calc_adjacent(board, 1, 2)
+
+	if enemy_fours >= 1:
+		# avoid at ALL COST
+		return -math.inf
+	else:
+		# For now, we are not going to prevent double-counting (might change later)
+		return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
+
+    #return rating
 
 def calc_adjacent(board, player, num):
     """num: how many we care about in a "row"
@@ -88,16 +82,34 @@ def calc_adjacent(board, player, num):
     """
     return 0
 
-def find_moves(board):
-    """returns list w/ columbs representing possible moves
-
+def find_moves(board, player):
+    """returns list w/ columns representing possible moves
     """
-    return []
+	# We will check if the column is filled (e.g. you can't add any more pieces to
+	# that column)
+	valid_moves = []
+	COLUMNS_MAX = 6
+	count_per_column = [0, 0, 0, 0, 0, 0]
+
+	for rows in board:
+		for i in range(0, len(rows)-1):
+			if rows[i] > 0:
+				# we want to add 1 to indicate there's 1 less spot in this column
+				count_per_column[i] += 1
+
+	for count in count_per_column:
+		if count < COLUMNS_MAX:
+			# If we found less pieces than the total allowed, add to valid moves
+			# because we can still add more to this column
+			valid_moves.append(count)
+
+    return valid_moves
 
 def make_move(board, move, player):
-    """make a move on board 
+    """make a move on board
     move: column
-    player: human(1) or ai (0)
+    player: human(1) or ai (2)
     return: board w/ move made
     """
+
     return board
