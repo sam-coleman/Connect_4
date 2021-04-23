@@ -50,27 +50,27 @@ def minimax(board, player, depth):#, prev_move):
 
 def calc_heuristic(board):
     """Our heuristic function. Returns the sum of all weights attached to
-	streaks (an integer).
+    streaks (an integer).
 
-	We are prioritizing not having the player win the most. After that, we prioritize
-	the AI winning and an equal weight for the rest of the streaks.
+    We are prioritizing not having the player win the most. After that, we prioritize
+    the AI winning and an equal weight for the rest of the streaks.
     """
-	# AI = 0, calculating the streaks the AI has
-	our_fours = calc_adjacent(board, 0, 4)
-	our_threes = calc_adjacent(board, 0, 3)
-	our_twos = calc_adjacent(board, 0, 2)
+    # AI = 0, calculating the streaks the AI has
+    our_fours = calc_adjacent(board, 0, 4)
+    our_threes = calc_adjacent(board, 0, 3)
+    our_twos = calc_adjacent(board, 0, 2)
 
-	# player = 1, calculating the streaks that the player has
-	enemy_fours = calc_adjacent(board, 1, 4)
-	enemy_threes = calc_adjacent(board, 1, 3)
-	enemy_twos = calc_adjacent(board, 1, 2)
+    # player = 1, calculating the streaks that the player has
+    enemy_fours = calc_adjacent(board, 1, 4)
+    enemy_threes = calc_adjacent(board, 1, 3)
+    enemy_twos = calc_adjacent(board, 1, 2)
 
-	if enemy_fours >= 1:
-		# avoid at ALL COST
-		return -math.inf
-	else:
-		# For now, we are not going to prevent double-counting (might change later)
-		return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
+    if enemy_fours >= 1:
+    	# avoid at ALL COST
+    	return -math.inf
+    else:
+    	# For now, we are not going to prevent double-counting (might change later)
+    	return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
 
     #return rating
 
@@ -80,28 +80,107 @@ def calc_adjacent(board, player, num):
 
     #return: # instances with num in a row for player
     """
-    return 0
+    total = 0
+
+    #want to find 4 in a rows
+    if num == 4:
+	# Check horizontal locations
+        for c in range(COLUMN_COUNT-3):
+            for r in range(ROW_COUNT):
+                if board[r][c] == player and board[r][c+1] == player and board[r][c+2] == player and board[r][c+3] == player:
+                    total += 1
+
+        # Check vertical locations
+        for c in range(COLUMN_COUNT):
+            for r in range(ROW_COUNT-3):
+                if board[r][c] == player and board[r+1][c] == player and board[r+2][c] == player and board[r+3][c] == player:
+                    total += 1
+
+        # Check positively sloped diaganols
+        for c in range(COLUMN_COUNT-3):
+            for r in range(ROW_COUNT-3):
+                if board[r][c] == player and board[r+1][c+1] == player and board[r+2][c+2] == player and board[r+3][c+3] == player:
+                    total += 1
+
+        # Check negatively sloped diaganols
+        for c in range(COLUMN_COUNT-3):
+            for r in range(3, ROW_COUNT):
+                if board[r][c] == player and board[r-1][c+1] == player and board[r-2][c+2] == player and board[r-3][c+3] == player:
+                    total += 1
+
+    elif num == 3:
+        	# Check horizontal locations
+        for c in range(COLUMN_COUNT-2):
+            for r in range(ROW_COUNT):
+                if board[r][c] == player and board[r][c+1] == player and board[r][c+2] == player:
+                    total += 1
+
+        # Check vertical locations
+        for c in range(COLUMN_COUNT):
+            for r in range(ROW_COUNT-2):
+                if board[r][c] == player and board[r+1][c] == player and board[r+2][c] == player:
+                    total += 1
+
+        # Check positively sloped diaganols
+        for c in range(COLUMN_COUNT-2):
+            for r in range(ROW_COUNT-2):
+                if board[r][c] == player and board[r+1][c+1] == player and board[r+2][c+2] == player:
+                    total += 1
+
+        # Check negatively sloped diaganols
+        for c in range(COLUMN_COUNT-2):
+            for r in range(2, ROW_COUNT):
+                if board[r][c] == player and board[r-1][c+1] == player and board[r-2][c+2] == player:
+                    total += 1
+
+    else: #num == 2
+
+        # Check horizontal locations
+        for c in range(COLUMN_COUNT-1):
+            for r in range(ROW_COUNT):
+                if board[r][c] == player and board[r][c+1] == player:
+                    total += 1
+
+        # Check vertical locations
+        for c in range(COLUMN_COUNT):
+            for r in range(ROW_COUNT-1):
+                if board[r][c] == player and board[r+1][c] == player:
+                    total += 1
+
+        # Check positively sloped diaganols
+        for c in range(COLUMN_COUNT-1):
+            for r in range(ROW_COUNT-1):
+                if board[r][c] == player and board[r+1][c+1] == player:
+                    total += 1
+
+        # Check negatively sloped diaganols
+        for c in range(COLUMN_COUNT-1):
+            for r in range(1, ROW_COUNT):
+                if board[r][c] == player and board[r-1][c+1] == player:
+                    total += 1
+
+    return total
 
 def find_moves(board, player):
     """returns list w/ columns representing possible moves
     """
-	# We will check if the column is filled (e.g. you can't add any more pieces to
-	# that column)
-	valid_moves = []
-	COLUMNS_MAX = 6
-	count_per_column = [0, 0, 0, 0, 0, 0]
+    # We will check if the column is filled (e.g. you can't add any more pieces to
+    # that column)
+    valid_moves = []
+    MAX_COLUMN_COUNT = 6
+    count_per_column = [0, 0, 0, 0, 0, 0]
 
-	for rows in board:
-		for i in range(0, len(rows)-1):
-			if rows[i] > 0:
-				# we want to add 1 to indicate there's 1 less spot in this column
-				count_per_column[i] += 1
+    for rows in board:
+    	for i in range(0, len(rows)-1):
+    		if rows[i] > 0:
+    			# we want to add 1 to indicate there's 1 less spot in this column
+    			count_per_column[i] += 1
 
-	for count in count_per_column:
-		if count < COLUMNS_MAX:
-			# If we found less pieces than the total allowed, add to valid moves
-			# because we can still add more to this column
-			valid_moves.append(count)
+    for col in range(0, len(count_per_column)-1):
+    	if count_per_column[col] < MAX_COLUMN_COUNT:
+    		# If we found less pieces than the total allowed, add to valid moves
+    		# because we can still add more to this column
+    		valid_moves.append(col)
 
     return valid_moves
 
@@ -111,5 +190,23 @@ def make_move(board, move, player):
     player: human(1) or ai (2)
     return: board w/ move made
     """
+
+    MAX_COLUMN_COUNT = 6
+    valid_moves = find_moves(board, player)
+    stuff_in_col = 0
+
+    if move not in valid_moves:
+        raise ValueError('Move %s is not valid. Valid moves: %s' % (move, valid_moves))
+
+    for rows in board:
+    	if rows[move] > 0:
+    	      # we want to add 1 to indicate there's 1 less spot in this column
+    	      stuff_in_col += 1
+
+    # We subtract by 6 because we are starting from the bottom and going up
+    index_for_col = MAX_COLUMN_COUNT - stuff_in_col
+    index_for_row = move
+
+    board[index_for_col][index_for_row] = player
 
     return board
