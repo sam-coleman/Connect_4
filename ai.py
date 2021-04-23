@@ -7,6 +7,14 @@ import sys
 import math
 import copy
 
+from connect4_pygame import (
+    ROW_COUNT,
+    COLUMN_COUNT,
+    AI,
+    PLAYER,
+    EMPTY
+)
+
 def minimax(board, player, depth):#, prev_move):
     """player = 0: AI (maximizer)
         player = 1: opponent (minimzer)
@@ -204,7 +212,7 @@ def make_move(board, move, player):
     	      stuff_in_col += 1
 
     # We subtract by 6 because we are starting from the bottom and going up
-    index_for_col = MAX_COLUMN_COUNT - stuff_in_col
+    index_for_col = MAX_COLUMN_COUNT - stuff_in_col - 1
     index_for_row = move
 
     board[index_for_col][index_for_row] = player

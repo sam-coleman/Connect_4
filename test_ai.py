@@ -8,11 +8,13 @@ from ai import (calc_adjacent,
                 find_moves,
                 make_move)
 
-from connect4_pygame import (COLUMN_COUNT,
-                             ROW_COUNT,
-                             EMPTY,
-                             PLAYER,
-                             AI)
+ROW_COUNT = 6
+COLUMN_COUNT = 7
+
+PLAYER = 1
+AI = 2
+
+EMPTY = 0
 
 
 def create_board(pieces = []):
@@ -21,9 +23,10 @@ def create_board(pieces = []):
 
     Pieces: list with structure [[row, column, player]]
     """
+
     board = [[0 for i in range(COLUMN_COUNT)] for i in range(ROW_COUNT)]
-    for row,column,player in pieces:
-        board[row][column] = player
+    for piece in pieces:
+        board[piece[0]][piece[1]] = piece[2]
     return board
 
 def create_all_but_one_board(player = AI):
@@ -48,7 +51,7 @@ def create_full_board(player = AI):
 find_moves_cases = [
     # moves to make, result
     ([0 for i in range(ROW_COUNT)], [1,2,3,4,5,6]),
-    ([],[0,1,2,3,4,5,6])
+    ([],[i for i in range(COLUMN_COUNT)])
 ]
 
 @pytest.mark.parametrize("moves, result", find_moves_cases)
@@ -62,7 +65,7 @@ def test_find_moves(moves, result):
 make_move_cases = [
     # board, move to make, result
     (create_all_but_one_board(), 0, create_full_board()),
-    (create_board(), 0, create_board([0,0,AI]))
+    (create_board(), 0, create_board([[0,0,AI]]))
 ]
 
 @pytest.mark.parametrize("board, move, result", make_move_cases)
