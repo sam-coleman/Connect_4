@@ -175,20 +175,12 @@ def find_moves(board, player):
     # We will check if the column is filled (e.g. you can't add any more pieces to
     # that column)
     valid_moves = []
-    MAX_COLUMN_COUNT = 6
     count_per_column = [0, 0, 0, 0, 0, 0]
 
-    for rows in board:
-    	for i in range(0, len(rows)-1):
-    		if rows[i] > 0:
-    			# we want to add 1 to indicate there's 1 less spot in this column
-    			count_per_column[i] += 1
-
-    for col in range(0, len(count_per_column)-1):
-    	if count_per_column[col] < MAX_COLUMN_COUNT:
-    		# If we found less pieces than the total allowed, add to valid moves
-    		# because we can still add more to this column
-    		valid_moves.append(col)
+    for i in range(0, len(board[0])-1): # Looking at the first row
+    	if board[0][i] == 0:
+    		# we want to add 1 to indicate there's 1 less spot in this column
+    		valid_moves.append(i)
 
     return valid_moves
 
