@@ -69,4 +69,8 @@ make_move_cases = [
 def test_make_move(board, move, result):
     assert make_move(board, move, AI) == result
 
+def test_make_move_full_board(board, move, result):
+    with pytest.raises(ValueError):
+        make_move(create_full_board(), 0)
+
 
