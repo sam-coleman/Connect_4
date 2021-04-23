@@ -65,7 +65,7 @@ def test_find_moves(moves, result):
 make_move_cases = [
     # board, move to make, result
     (create_all_but_one_board(), 0, create_full_board()),
-    (create_board(), 0, create_board([[0,0,AI]]))
+    (create_board(), 0, create_board([[ROW_COUNT-1,0,AI]]))
 ]
 
 @pytest.mark.parametrize("board, move, result", make_move_cases)
