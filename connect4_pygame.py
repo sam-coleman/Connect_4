@@ -7,6 +7,7 @@ import pygame
 import sys
 import math
 import random
+import ai
 
 BLUE = (0,0,255)
 BLACK = (0,0,0)
@@ -70,12 +71,12 @@ def draw_board(board):
 		for r in range(ROW_COUNT):
 			pygame.draw.rect(screen, BLUE, (c*SQUARESIZE, r*SQUARESIZE+SQUARESIZE, SQUARESIZE, SQUARESIZE))
 			pygame.draw.circle(screen, BLACK, (int(c*SQUARESIZE+SQUARESIZE/2), int(r*SQUARESIZE+SQUARESIZE+SQUARESIZE/2)), RADIUS)
-	
+
 	for c in range(COLUMN_COUNT):
-		for r in range(ROW_COUNT):		
+		for r in range(ROW_COUNT):
 			if board[r][c] == 1:
 				pygame.draw.circle(screen, RED, (int(c*SQUARESIZE+SQUARESIZE/2), height-int(r*SQUARESIZE+SQUARESIZE/2)), RADIUS)
-			elif board[r][c] == 2: 
+			elif board[r][c] == 2:
 				pygame.draw.circle(screen, YELLOW, (int(c*SQUARESIZE+SQUARESIZE/2), height-int(r*SQUARESIZE+SQUARESIZE/2)), RADIUS)
 	pygame.display.update()
 
@@ -140,7 +141,7 @@ if __name__ == "__main__":
 
 
 		# # Ask for Player 2 Input
-		if turn == AI and not game_over:				
+		if turn == AI and not game_over:
 
 			# #col = random.randint(0, COLUMN_COUNT-1)
 			# #col = pick_best_move(board, AI_PIECE)
@@ -155,8 +156,10 @@ if __name__ == "__main__":
 			# 		label = myfont.render("Player 2 wins!!", 1, YELLOW)
 			# 		screen.blit(label, (40,10))
 			# 		game_over = True
-				col = random.randint(0, COLUMN_COUNT - 1)
-				
+				#col = random.randint(0, COLUMN_COUNT - 1)
+
+				col = ai.minimax(board, 0, 4)[1] # move is the column
+
 				if is_valid_location(board, col):
 					pygame.time.wait(500)
 					row = get_next_open_row(board, col)
@@ -166,7 +169,7 @@ if __name__ == "__main__":
 					label = myfont.render("Player 2 wins!!", 1, YELLOW)
 					screen.blit(label, (40,10))
 					game_over = True
-					
+
 				print_board(board)
 				draw_board(board)
 
