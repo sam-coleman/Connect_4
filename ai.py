@@ -190,7 +190,8 @@ def make_move(board, move, player):
     return: board w/ move made
     """
 
-    MAX_COLUMN_COUNT = 7
+    global ROW_COUNT
+
     valid_moves = find_moves(board, player)
     stuff_in_col = 0
 
@@ -203,7 +204,7 @@ def make_move(board, move, player):
     	      stuff_in_col += 1
 
     # We subtract by 6 because we are starting from the bottom and going up
-    index_for_col = MAX_COLUMN_COUNT - stuff_in_col - 1
+    index_for_col = ROW_COUNT - stuff_in_col - 1
     index_for_row = move
 
     board[index_for_col][index_for_row] = player
