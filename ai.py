@@ -41,12 +41,14 @@ def minimax(board, player, depth):#, prev_move):
         #DO SOMETIHING IF POSS MOVES EMPTY
         results = []
         
+        list_o_boards = []
         for move in poss_moves:
-            new_board = copy.deepcopy(board)
-            new_board = make_move(new_board, move, player)
-            results.append((minimax(copy.deepcopy(new_board), 1, depth-1)[0], move))
-        
+            list_o_boards.append(copy.deepcopy(board))
+            list_o_boards[-1] = make_move(list_o_boards[-1], move, player)
+            results.append((minimax(copy.deepcopy(list_o_boards[-1]), 1, depth-1)[0], move))   
+            print(list_o_boards[-1],move)     
         try: 
+            # print(max(results), results)
             return max(results)
         except:
             return 0,move
