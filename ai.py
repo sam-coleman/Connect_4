@@ -106,13 +106,13 @@ def calc_heuristic(board):
     enemy_threes = calc_adjacent(board, PLAYER, 3)
     enemy_twos = calc_adjacent(board, PLAYER, 2)
 
-    if enemy_fours >= 1:
-    	# avoid at ALL COST
-    	return -math.inf
-    else:
-    	# For now, we are not going to prevent double-counting (might change later)
-    	return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
-
+    # if enemy_fours >= 1:
+    # 	# avoid at ALL COST
+    # 	return -math.inf
+    # else:
+    # 	# For now, we are not going to prevent double-counting (might change later)
+    # 	return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
+    return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_fours*(-1000000) + enemy_threes*(-1000) + enemy_twos*(-10))
     #return rating
 
 def calc_adjacent(board, player, num):

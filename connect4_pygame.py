@@ -158,7 +158,7 @@ if __name__ == "__main__":
 			# 		game_over = True
 				#col = random.randint(0, COLUMN_COUNT - 1)
 
-				col = ai.minimax(board, 0, 4)[1] # move is the column
+				col = ai.minimax(board, AI, 4)[1] # move is the column
 
 				if is_valid_location(board, col):
 					pygame.time.wait(500)
