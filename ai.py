@@ -45,7 +45,7 @@ def minimax(board, player, depth):#, prev_move):
         for move in poss_moves:
             list_o_boards.append(copy.deepcopy(board))
             list_o_boards[-1] = make_move(list_o_boards[-1], move, player)
-            results.append((minimax(copy.deepcopy(list_o_boards[-1]), 1, depth-1)[0], move))   
+            results.append((minimax(copy.deepcopy(list_o_boards[-1]), PLAYER, depth-1)[0], move))   
             print(list_o_boards[-1],move)     
         try: 
             # print(max(results), results)
@@ -60,7 +60,7 @@ def minimax(board, player, depth):#, prev_move):
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
-            results.append((minimax(copy.deepcopy(new_board), 0, depth-1)[0], move))
+            results.append((minimax(copy.deepcopy(new_board), AI, depth-1)[0], move))
 
         try: 
             return max(results)
@@ -75,14 +75,14 @@ def calc_heuristic(board):
     the AI winning and an equal weight for the rest of the streaks.
     """
     # AI = 0, calculating the streaks the AI has
-    our_fours = calc_adjacent(board, 0, 4)
-    our_threes = calc_adjacent(board, 0, 3)
-    our_twos = calc_adjacent(board, 0, 2)
+    our_fours = calc_adjacent(board, AI, 4)
+    our_threes = calc_adjacent(board, AI, 3)
+    our_twos = calc_adjacent(board, AI, 2)
 
     # player = 1, calculating the streaks that the player has
-    enemy_fours = calc_adjacent(board, 1, 4)
-    enemy_threes = calc_adjacent(board, 1, 3)
-    enemy_twos = calc_adjacent(board, 1, 2)
+    enemy_fours = calc_adjacent(board, PLAYER, 4)
+    enemy_threes = calc_adjacent(board, PLAYER, 3)
+    enemy_twos = calc_adjacent(board, PLAYER, 2)
 
     if enemy_fours >= 1:
     	# avoid at ALL COST
