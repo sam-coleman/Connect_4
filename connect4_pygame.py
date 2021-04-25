@@ -82,7 +82,7 @@ def draw_board(board):
 
 if __name__ == "__main__":
 	board = create_board()
-	print_board(board)
+	# print_board(board)
 	game_over = False
 	turn = PLAYER
 
@@ -136,7 +136,7 @@ if __name__ == "__main__":
 
 						turn = AI
 
-						print_board(board)
+						# print_board(board)
 						draw_board(board)
 
 
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 					screen.blit(label, (40,10))
 					game_over = True
 
-				print_board(board)
+				# print_board(board)
 				draw_board(board)
 
 				turn = PLAYER

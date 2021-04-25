@@ -22,20 +22,24 @@ def minimax(board, player, depth):#, prev_move):
     """
     #what is move? how calculate? column?
     #TODO no possible moves? what return?
+    print('hello')
 
     #check if someone has won
-    if calc_adjacent(board, 1, 4) > 0:
+    if calc_adjacent(board, PLAYER, 4) > 0:
         #SUPER BAD--Lose
+        print('bad')
         return -math.inf, -1
-    if calc_adjacent(board, 0, 4) > 0:
+    if calc_adjacent(board, AI, 4) > 0:
         #SUPER GOOD--Win
+        print('good')
         return math.inf, -1
 
     if depth == 0: #reached max recursion
-        return heuristic(board), -1
+        print("at depth 0", calc_heuristic(board))
+        return calc_heuristic(board), -1
 
     elif player == 0: #AI playing, maximizer
-        poss_moves = find_moves(boards)
+        poss_moves = find_moves(board,0)
         #DO SOMETIHING IF POSS MOVES EMPTY
         results = []
         for move in poss_moves:
@@ -46,7 +50,7 @@ def minimax(board, player, depth):#, prev_move):
         return max(results)
 
     else: #human playing, minimzer
-        poss_moves = find_moves(boards)
+        poss_moves = find_moves(board,1)
         #DO SOMETIHING IF POSS MOVES EMPTY
         results = []
         for move in poss_moves:
@@ -57,6 +61,7 @@ def minimax(board, player, depth):#, prev_move):
         return min(results)
 
 def calc_heuristic(board):
+    print('CALC HEURISTIC!!!!')
     """Our heuristic function. Returns the sum of all weights attached to
     streaks (an integer).
 
