@@ -36,25 +36,47 @@ def minimax(board, player, depth):#, prev_move):
     if depth == 0: #reached max recursion
         return calc_heuristic(board), -1
 
-    elif player == 0: #AI playing, maximizer
-        poss_moves = find_moves(board,0)
+    elif player == AI: #AI playing, maximizer
+        poss_moves = find_moves(board,AI)
         #DO SOMETIHING IF POSS MOVES EMPTY
         results = []
         
-        list_o_boards = []
         for move in poss_moves:
-            list_o_boards.append(copy.deepcopy(board))
-            list_o_boards[-1] = make_move(list_o_boards[-1], move, player)
-            results.append((minimax(copy.deepcopy(list_o_boards[-1]), PLAYER, depth-1)[0], move))   
-            print(list_o_boards[-1],move)     
+            new_board = copy.deepcopy(board)
+            #print("before move", new_board)
+            new_board = make_move(new_board, move, player)
+            #print("after move", new_board)
+            print(results)
+            results.append((minimax(copy.deepcopy(new_board), PLAYER, depth-1)[0], move))
+        
         try: 
-            # print(max(results), results)
             return max(results)
         except:
             return 0,move
+        # poss_moves = find_moves(board,AI)
+        # #DO SOMETIHING IF POSS MOVES EMPTY
+        # results = []
+        
+        # #list_o_boards = []
+        # for move in poss_moves:
+        #     new_board = copy.deepcopy(board)
+        #     new_board = make_move(new_board, move, player)
+        #     print(new_board)
+        #     #list_o_boards.append(copy.deepcopy(board))
+        #     #print("before move:", list_o_boards[-1])
+        #     #list_o_boards[-1] = make_move(list_o_boards[-1], move, player)
+        #     #print("after move:", list_o_boards[-1])
+        #     results.append((minimax(copy.deepcopy(new_board, PLAYER, depth-1)[0], move)))
+        #     #results.append((minimax(copy.deepcopy(list_o_boards[-1]), PLAYER, depth-1)[0], move))   
+        #     #print(list_o_boards[-1],move)     
+        # try: 
+        #     #print(max(results), results)
+        #     return max(results)
+        # except:
+        #     return 0,move
 
     else: #human playing, minimzer
-        poss_moves = find_moves(board,1)
+        poss_moves = find_moves(board,PLAYER)
         #DO SOMETIHING IF POSS MOVES EMPTY
         results = []
         for move in poss_moves:
