@@ -130,7 +130,7 @@ if __name__ == "__main__":
 						drop_piece(board, row, col, PLAYER)
 
 						if winning_move(board, PLAYER):
-							label = myfont.render("Player 1 wins!!", 1, RED)
+							label = myfont.render("Human Wins!!", 1, RED)
 							screen.blit(label, (40,10))
 							game_over = True
 
@@ -150,7 +150,7 @@ if __name__ == "__main__":
 				drop_piece(board, row, col, AI)
 
 			if winning_move(board, AI):
-				label = myfont.render("Player 2 wins!!", 1, YELLOW)
+				label = myfont.render("AI wins!!", 1, YELLOW)
 				screen.blit(label, (40,10))
 				game_over = True
 
@@ -158,5 +158,5 @@ if __name__ == "__main__":
 			draw_board(board)
 			turn = PLAYER
 
-		# if game_over:
-		# 	pygame.time.wait(3000)
+		if game_over:
+			pygame.time.wait(3000)
