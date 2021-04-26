@@ -190,7 +190,7 @@ def find_moves(board, player):
     valid_moves = []
 
     for i in range(0, len(board[0])): # Looking at the first row
-    	if board[ROW_COUNT-1][i] == 0:
+    	if board[0][i] == 0: #(np.flip(board, 0)
     		# we want to add 1 to indicate there's 1 less spot in this column
     		valid_moves.append(i)
 
