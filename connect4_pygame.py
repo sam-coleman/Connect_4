@@ -103,11 +103,13 @@ if __name__ == "__main__":
 
 	myfont = pygame.font.SysFont("monospace", 75)
 
-	while not game_over:
+	while True:
 
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				sys.exit()
+
+		if not game_over:
 
 			if event.type == pygame.MOUSEMOTION:
 				pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
@@ -140,23 +142,20 @@ if __name__ == "__main__":
 						draw_board(board)
 
 
-		# # Ask for Player 2 Input
-		if turn == AI and not game_over:
-			col = ai.minimax(np.flip(board, 0), AI, 4)[1] # move is the column
+			# # Ask for Player 2 Input
+			if turn == AI and not game_over:
+				col = ai.minimax(np.flip(board, 0), AI, 1)[1] # move is the column
 
-			if is_valid_location(board, col):
-				pygame.time.wait(500)
-				row = get_next_open_row(board, col)
-				drop_piece(board, row, col, AI)
+				if is_valid_location(board, col):
+					pygame.time.wait(500)
+					row = get_next_open_row(board, col)
+					drop_piece(board, row, col, AI)
 
-			if winning_move(board, AI):
-				label = myfont.render("AI wins!!", 1, YELLOW)
-				screen.blit(label, (40,10))
-				game_over = True
+				if winning_move(board, AI):
+					label = myfont.render("AI wins!!", 1, YELLOW)
+					screen.blit(label, (40,10))
+					game_over = True
 
-				# print_board(board)
-			draw_board(board)
-			turn = PLAYER
-
-		if game_over:
-			pygame.time.wait(3000)
+					# print_board(board)
+				draw_board(board)
+				turn = PLAYER
