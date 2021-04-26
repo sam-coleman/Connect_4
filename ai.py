@@ -45,36 +45,16 @@ def minimax(board, player, depth):#, prev_move):
             new_board = copy.deepcopy(board)
             #print("before move", new_board)
             new_board = make_move(new_board, move, player)
+            print(new_board, move, player)
             #print("after move", new_board)
-            print(results)
+            #print(results)
             results.append((minimax(copy.deepcopy(new_board), PLAYER, depth-1)[0], move))
         
         try: 
             return max(results)
         except:
             return 0,move
-        # poss_moves = find_moves(board,AI)
-        # #DO SOMETIHING IF POSS MOVES EMPTY
-        # results = []
-        
-        # #list_o_boards = []
-        # for move in poss_moves:
-        #     new_board = copy.deepcopy(board)
-        #     new_board = make_move(new_board, move, player)
-        #     print(new_board)
-        #     #list_o_boards.append(copy.deepcopy(board))
-        #     #print("before move:", list_o_boards[-1])
-        #     #list_o_boards[-1] = make_move(list_o_boards[-1], move, player)
-        #     #print("after move:", list_o_boards[-1])
-        #     results.append((minimax(copy.deepcopy(new_board, PLAYER, depth-1)[0], move)))
-        #     #results.append((minimax(copy.deepcopy(list_o_boards[-1]), PLAYER, depth-1)[0], move))   
-        #     #print(list_o_boards[-1],move)     
-        # try: 
-        #     #print(max(results), results)
-        #     return max(results)
-        # except:
-        #     return 0,move
-
+       
     else: #human playing, minimzer
         poss_moves = find_moves(board,PLAYER)
         #DO SOMETIHING IF POSS MOVES EMPTY
@@ -106,14 +86,14 @@ def calc_heuristic(board):
     enemy_threes = calc_adjacent(board, PLAYER, 3)
     enemy_twos = calc_adjacent(board, PLAYER, 2)
 
-    # if enemy_fours >= 1:
-    # 	# avoid at ALL COST
-    # 	return -math.inf
-    # else:
-    # 	# For now, we are not going to prevent double-counting (might change later)
-    # 	return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
-    return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_fours*(-1000000) + enemy_threes*(-1000) + enemy_twos*(-10))
-    #return rating
+    if enemy_fours >= 1:
+    	# avoid at ALL COST
+    	return -math.inf
+    else:
+    	# For now, we are not going to prevent double-counting (might change later)
+    	return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
+    #return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_fours*(-1000000) + enemy_threes*(-1000) + enemy_twos*(-10))
+    return rating
 
 def calc_adjacent(board, player, num):
     """num: how many we care about in a "row"
