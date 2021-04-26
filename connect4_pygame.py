@@ -142,38 +142,21 @@ if __name__ == "__main__":
 
 		# # Ask for Player 2 Input
 		if turn == AI and not game_over:
+			col = ai.minimax(np.flip(board, 0), AI, 4)[1] # move is the column
 
-			# #col = random.randint(0, COLUMN_COUNT-1)
-			# #col = pick_best_move(board, AI_PIECE)
-			# col, minimax_score = minimax(board, 5, -math.inf, math.inf, True)
+			if is_valid_location(board, col):
+				pygame.time.wait(500)
+				row = get_next_open_row(board, col)
+				drop_piece(board, row, col, AI)
 
-			# if is_valid_location(board, col):
-			# 	#pygame.time.wait(500)
-			# 	row = get_next_open_row(board, col)
-			# 	drop_piece(board, row, col, AI_PIECE)
-
-			# 	if winning_move(board, AI_PIECE):
-			# 		label = myfont.render("Player 2 wins!!", 1, YELLOW)
-			# 		screen.blit(label, (40,10))
-			# 		game_over = True
-				#col = random.randint(0, COLUMN_COUNT - 1)
-
-				col = ai.minimax(np.flip(board, 0), AI, 4)[1] # move is the column
-
-				if is_valid_location(board, col):
-					pygame.time.wait(500)
-					row = get_next_open_row(board, col)
-					drop_piece(board, row, col, AI)
-
-				if winning_move(board, AI):
-					label = myfont.render("Player 2 wins!!", 1, YELLOW)
-					screen.blit(label, (40,10))
-					game_over = True
+			if winning_move(board, AI):
+				label = myfont.render("Player 2 wins!!", 1, YELLOW)
+				screen.blit(label, (40,10))
+				game_over = True
 
 				# print_board(board)
-				draw_board(board)
-
-				turn = PLAYER
+			draw_board(board)
+			turn = PLAYER
 
 		if game_over:
 			pygame.time.wait(3000)
