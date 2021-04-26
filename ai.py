@@ -26,11 +26,9 @@ def minimax(board, player, depth):#, prev_move):
     #check if someone has won
     if calc_adjacent(board, PLAYER, 4) > 0:
         #SUPER BAD--Lose
-        print('bad')
         return -math.inf, -1
     if calc_adjacent(board, AI, 4) > 0:
         #SUPER GOOD--Win
-        print('good')
         return math.inf, -1
 
     if depth == 0: #reached max recursion
@@ -38,28 +36,18 @@ def minimax(board, player, depth):#, prev_move):
 
     elif player == AI: #AI playing, maximizer
         poss_moves = find_moves(board,AI)
-        #DO SOMETIHING IF POSS MOVES EMPTY
-        results = []
-        
+        results = []        
         for move in poss_moves:
             new_board = copy.deepcopy(board)
-            #print("before move", new_board)
             new_board = make_move(new_board, move, player)
-            # print(new_board, move, player)
-            #print("after move", new_board)
-            #print(results)
             results.append((minimax(copy.deepcopy(new_board), PLAYER, depth-1)[0], move))
-        
         try: 
-            if depth == 4:
-                print(results, max(results)) 
             return max(results)
         except:
             return 0,move
        
     else: #human playing, minimzer
         poss_moves = find_moves(board,PLAYER)
-        #DO SOMETIHING IF POSS MOVES EMPTY
         results = []
         for move in poss_moves:
             new_board = copy.deepcopy(board)
