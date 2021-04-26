@@ -42,13 +42,22 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             result = ((minimax(copy.deepcopy(new_board), PLAYER, depth-1, alpha, beta)[0], move))
-            val = max(max_val, result[0])
-            if val != result[0]:
-                print("CRISIS")
-            alpha = max(val, alpha)
-            # if alpha >= beta:
-                # print('alpha beta thing', alpha, beta, result)
-                # break
+            max_val = max(max_val, result[0])
+            alpha = max(alpha, result[0])
+            if depth < 3:
+                if beta <= alpha:
+                    print("PRUNING")
+                    break
+                else:
+                    print("NOT PRUNING")
+            #print(f"result 0 is: {result[0]}")
+            # val = max(max_val, result[0])
+            # if val != result[0]:
+            #     print("CRISIS")
+            # alpha = max(val, alpha)
+            # # if alpha >= beta:
+            #     # print('alpha beta thing', alpha, beta, result)
+            #     # break
             results.append(result)
         try: 
             # print(results)
@@ -66,13 +75,22 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             result = ((minimax(copy.deepcopy(new_board), AI, depth-1, alpha, beta)[0], move))
-            val = min(min_val,result[0])
-            if val != result[0]:
-                print("CRISIS")
-            beta = min(val, beta)
-            # if beta <= alpha:
-                # print('ab thing in minim', alpha, beta)
-                # break 
+            min_eval = min(min_val, result[0])
+            beta = min(beta, result[0])
+            if depth < 3:
+                if beta <= alpha:
+                    print("PRUNING")
+                    break
+                else:
+                    print("NOT PRUNING")
+            # print(f"result 0 is: {result[0]}")
+            # val = min(min_val,result[0])
+            # if val != result[0]:
+            #     print("CRISIS")
+            # beta = min(val, beta)
+            # # if beta <= alpha:
+            #     # print('ab thing in minim', alpha, beta)
+            #     # break 
             results.append(result)
         try:
             return min(results)
