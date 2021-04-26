@@ -37,19 +37,19 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
     elif player == AI: #AI playing, maximizer
         poss_moves = find_moves(board,AI)
         results = []  
-        max_val = -math.inf      
+        #max_val = -math.inf      
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             result = ((minimax(copy.deepcopy(new_board), PLAYER, depth-1, alpha, beta)[0], move))
-            max_val = max(max_val, result[0])
-            alpha = max(alpha, result[0])
-            if depth < 3:
-                if beta <= alpha:
-                    print("PRUNING")
-                    break
-                else:
-                    print("NOT PRUNING")
+            # max_val = max(max_val, result[0])
+            # alpha = max(alpha, result[0])
+            # if depth < 3:
+            #     if beta <= alpha:
+            #         print("PRUNING")
+            #         break
+            #     else:
+            #         print("NOT PRUNING")
             #print(f"result 0 is: {result[0]}")
             # val = max(max_val, result[0])
             # if val != result[0]:
@@ -70,19 +70,19 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
     else: #human playing, minimzer
         poss_moves = find_moves(board,PLAYER)
         results = []
-        min_val = math.inf
+        #min_val = math.inf
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             result = ((minimax(copy.deepcopy(new_board), AI, depth-1, alpha, beta)[0], move))
-            min_eval = min(min_val, result[0])
-            beta = min(beta, result[0])
-            if depth < 3:
-                if beta <= alpha:
-                    print("PRUNING")
-                    break
-                else:
-                    print("NOT PRUNING")
+            #min_eval = min(min_val, result[0])
+            # beta = min(beta, result[0])
+            # if depth < 3:
+            #     if beta <= alpha:
+            #         print("PRUNING")
+            #         break
+            #     else:
+            #         print("NOT PRUNING")
             # print(f"result 0 is: {result[0]}")
             # val = min(min_val,result[0])
             # if val != result[0]:
@@ -113,6 +113,8 @@ def calc_heuristic(board):
     enemy_fours = calc_adjacent(board, PLAYER, 4)
     enemy_threes = calc_adjacent(board, PLAYER, 3)
     enemy_twos = calc_adjacent(board, PLAYER, 2)
+
+    #num_in_center = 
 
     if enemy_fours >= 1:
     	# avoid at ALL COST
