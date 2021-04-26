@@ -15,7 +15,7 @@ from connect4_pygame import (
     EMPTY
 )
 
-def minimax(board, player, depth):#, prev_move):
+def minimax(board, player, depth, alpha, beta):#, prev_move):
     """player = 0: AI (maximizer)
         player = 1: opponent (minimzer)
         prev_move: int representing last column played in
@@ -36,14 +36,24 @@ def minimax(board, player, depth):#, prev_move):
 
     elif player == AI: #AI playing, maximizer
         poss_moves = find_moves(board,AI)
-        results = []        
+        results = []  
+        max_val = -math.inf      
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
-            results.append((minimax(copy.deepcopy(new_board), PLAYER, depth-1)[0], move))
+            result = ((minimax(copy.deepcopy(new_board), PLAYER, depth-1, alpha, beta)[0], move))
+            val = max(max_val, result[0])
+            if val != result[0]:
+                print("CRISIS")
+            alpha = max(val, alpha)
+            # if alpha >= beta:
+                # print('alpha beta thing', alpha, beta, result)
+                # break
+            results.append(result)
         try: 
-            if depth == 4:
-                print(f"at top level results: {results} max results {max(results)}")
+            # print(results)
+            # if depth == 4:
+                # print(results, max(results))
             return max(results)
         except:
             return 0,move
@@ -51,10 +61,19 @@ def minimax(board, player, depth):#, prev_move):
     else: #human playing, minimzer
         poss_moves = find_moves(board,PLAYER)
         results = []
+        min_val = math.inf
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
-            results.append((minimax(copy.deepcopy(new_board), AI, depth-1)[0], move))
+            result = ((minimax(copy.deepcopy(new_board), AI, depth-1, alpha, beta)[0], move))
+            val = min(min_val,result[0])
+            if val != result[0]:
+                print("CRISIS")
+            beta = min(val, beta)
+            # if beta <= alpha:
+                # print('ab thing in minim', alpha, beta)
+                # break 
+            results.append(result)
         try:
             return min(results)
         except:
@@ -79,11 +98,10 @@ def calc_heuristic(board):
 
     if enemy_fours >= 1:
     	# avoid at ALL COST
-    	return -math.inf
+    	rating = -math.inf
     else:
     	# For now, we are not going to prevent double-counting (might change later)
-    	return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
-    #return (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_fours*(-1000000) + enemy_threes*(-1000) + enemy_twos*(-10))
+    	rating = (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
     return rating
 
 def calc_adjacent(board, player, num):
