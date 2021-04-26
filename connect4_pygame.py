@@ -158,5 +158,5 @@ if __name__ == "__main__":
 			draw_board(board)
 			turn = PLAYER
 
-		if game_over:
-			pygame.time.wait(3000)
+		# if game_over:
+		# 	pygame.time.wait(3000)
