@@ -51,6 +51,8 @@ def minimax(board, player, depth):#, prev_move):
             results.append((minimax(copy.deepcopy(new_board), PLAYER, depth-1)[0], move))
         
         try: 
+            if depth == 4:
+                print(f"at top level results: {results} max results {max(results)}")
             return max(results)
         except:
             return 0,move
@@ -65,7 +67,7 @@ def minimax(board, player, depth):#, prev_move):
             results.append((minimax(copy.deepcopy(new_board), AI, depth-1)[0], move))
 
         try: 
-            return max(results)
+            return min(results)
         except:
             return 0,move
 
