@@ -142,14 +142,9 @@ if __name__ == "__main__":
 						draw_board(board)
 
 
-		# # Ask for Player 2 Input
-		if turn == AI and not game_over:
-			col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf)[1] # move is the column
-
-			if is_valid_location(board, col):
-				pygame.time.wait(500)
-				row = get_next_open_row(board, col)
-				drop_piece(board, row, col, AI)
+			# # Ask for Player 2 Input
+			if turn == AI and not game_over:
+				col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf)[1] # move is the column
 
 				if is_valid_location(board, col):
 					pygame.time.wait(500)
