@@ -43,14 +43,14 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             result = ((minimax(copy.deepcopy(new_board), PLAYER, depth-1, alpha, beta)[0], move))
+            results.append(result)
             val = max(max_val, result[0])
             if val != result[0]:
                 print("CRISIS")
-            alpha = max(val, alpha)
-            if alpha >= beta:
+            alpha = max(max(results)[0], alpha)
+            if alpha > beta:
                 print('alpha beta thing', alpha, beta, result)
                 break
-            results.append(result)
         try: 
             return max(results)
         except:
@@ -64,14 +64,14 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             result = ((minimax(copy.deepcopy(new_board), AI, depth-1, alpha, beta)[0], move))
+            results.append(result)
             val = min(min_val,result[0])
             if val != result[0]:
                 print("CRISIS")
-            beta = min(val, beta)
-            if beta <= alpha:
+            beta = min(min(results)[0], beta)
+            if alpha > beta:
                 print('ab thing in minim', alpha, beta)
                 break 
-            results.append(result)
         try:
             return min(results)
         except:
