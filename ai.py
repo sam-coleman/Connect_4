@@ -31,21 +31,21 @@ def minimax(board, player, depth):#, prev_move):
         #SUPER GOOD--Win
         return math.inf, -1
 
-    if depth == 0: #reached max recursion
+    poss_moves = find_moves(board,AI)
+    if depth == 0 or len(poss_moves) == 0: #reached max recursion
         return calc_heuristic(board), -1
 
     elif player == AI: #AI playing, maximizer
-        poss_moves = find_moves(board,AI)
-        results = []        
+        results = []
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             results.append((minimax(copy.deepcopy(new_board), PLAYER, depth-1)[0], move))
-        try: 
+        try:
             return max(results)
         except:
             return 0,move
-       
+
     else: #human playing, minimzer
         poss_moves = find_moves(board,PLAYER)
         results = []
@@ -195,6 +195,8 @@ def make_move(board, move, player):
     global ROW_COUNT
 
     valid_moves = find_moves(board, player)
+    # if len(valid_moves) == 0:
+    #     return
     stuff_in_col = 0
 
     if move not in valid_moves:
