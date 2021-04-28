@@ -31,7 +31,8 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
         #SUPER GOOD--Win
         return math.inf, -1
 
-    if depth == 0: #reached max recursion
+    poss_moves = find_moves(board,AI)
+    if depth == 0 or len(poss_moves) == 0: #reached max recursion
         return calc_heuristic(board), -1
 
     elif player == AI: #AI playing, maximizer
@@ -46,18 +47,15 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             if val != result[0]:
                 print("CRISIS")
             alpha = max(val, alpha)
-            # if alpha >= beta:
-                # print('alpha beta thing', alpha, beta, result)
-                # break
+            if alpha >= beta:
+                print('alpha beta thing', alpha, beta, result)
+                break
             results.append(result)
         try: 
-            # print(results)
-            # if depth == 4:
-                # print(results, max(results))
             return max(results)
         except:
             return 0,move
-       
+
     else: #human playing, minimzer
         poss_moves = find_moves(board,PLAYER)
         results = []
@@ -70,9 +68,9 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             if val != result[0]:
                 print("CRISIS")
             beta = min(val, beta)
-            # if beta <= alpha:
-                # print('ab thing in minim', alpha, beta)
-                # break 
+            if beta <= alpha:
+                print('ab thing in minim', alpha, beta)
+                break 
             results.append(result)
         try:
             return min(results)
@@ -215,6 +213,8 @@ def make_move(board, move, player):
     global ROW_COUNT
 
     valid_moves = find_moves(board, player)
+    # if len(valid_moves) == 0:
+    #     return
     stuff_in_col = 0
 
     if move not in valid_moves:
