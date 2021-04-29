@@ -31,7 +31,8 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
         #SUPER GOOD--Win
         return math.inf, -1
 
-    if depth == 0: #reached max recursion
+    poss_moves = find_moves(board,AI)
+    if depth == 0 or len(poss_moves) == 0: #reached max recursion
         return calc_heuristic(board), -1
 
     elif player == AI: #AI playing, maximizer
@@ -42,31 +43,19 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             result = ((minimax(copy.deepcopy(new_board), PLAYER, depth-1, alpha, beta)[0], move))
-            # max_val = max(max_val, result[0])
-            # alpha = max(alpha, result[0])
-            # if depth < 3:
-            #     if beta <= alpha:
-            #         print("PRUNING")
-            #         break
-            #     else:
-            #         print("NOT PRUNING")
-            #print(f"result 0 is: {result[0]}")
-            # val = max(max_val, result[0])
-            # if val != result[0]:
-            #     print("CRISIS")
-            # alpha = max(val, alpha)
-            # # if alpha >= beta:
-            #     # print('alpha beta thing', alpha, beta, result)
-            #     # break
             results.append(result)
+            val = max(max_val, result[0])
+            if val != result[0]:
+                print("CRISIS")
+            alpha = max(max(results)[0], alpha)
+            if alpha > beta:
+                print('alpha beta thing', alpha, beta, result)
+                break
         try: 
-            # print(results)
-            # if depth == 4:
-                # print(results, max(results))
             return max(results)
         except:
             return 0,move
-       
+
     else: #human playing, minimzer
         poss_moves = find_moves(board,PLAYER)
         results = []
@@ -75,23 +64,14 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
             result = ((minimax(copy.deepcopy(new_board), AI, depth-1, alpha, beta)[0], move))
-            #min_eval = min(min_val, result[0])
-            # beta = min(beta, result[0])
-            # if depth < 3:
-            #     if beta <= alpha:
-            #         print("PRUNING")
-            #         break
-            #     else:
-            #         print("NOT PRUNING")
-            # print(f"result 0 is: {result[0]}")
-            # val = min(min_val,result[0])
-            # if val != result[0]:
-            #     print("CRISIS")
-            # beta = min(val, beta)
-            # # if beta <= alpha:
-            #     # print('ab thing in minim', alpha, beta)
-            #     # break 
             results.append(result)
+            val = min(min_val,result[0])
+            if val != result[0]:
+                print("CRISIS")
+            beta = min(min(results)[0], beta)
+            if alpha > beta:
+                print('ab thing in minim', alpha, beta)
+                break 
         try:
             return min(results)
         except:
@@ -235,6 +215,8 @@ def make_move(board, move, player):
     global ROW_COUNT
 
     valid_moves = find_moves(board, player)
+    # if len(valid_moves) == 0:
+    #     return
     stuff_in_col = 0
 
     if move not in valid_moves:
