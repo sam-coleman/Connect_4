@@ -38,7 +38,7 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
     elif player == AI: #AI playing, maximizer
         poss_moves = find_moves(board,AI)
         results = []  
-        #max_val = -math.inf      
+        max_val = -math.inf      
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
@@ -59,7 +59,7 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
     else: #human playing, minimzer
         poss_moves = find_moves(board,PLAYER)
         results = []
-        #min_val = math.inf
+        min_val = math.inf
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
@@ -94,14 +94,14 @@ def calc_heuristic(board):
     enemy_threes = calc_adjacent(board, PLAYER, 3)
     enemy_twos = calc_adjacent(board, PLAYER, 2)
 
-    #num_in_center = 
-
     if enemy_fours >= 1:
     	# avoid at ALL COST
     	rating = -math.inf
+    elif our_fours >= 1:
+        rating = math.inf
     else:
     	# For now, we are not going to prevent double-counting (might change later)
-    	rating = (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
+    	rating = (our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10)) #our_fours*(1000000) +
     return rating
 
 def calc_adjacent(board, player, num):

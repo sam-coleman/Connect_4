@@ -110,36 +110,51 @@ if __name__ == "__main__":
 				sys.exit()
 
 		if not game_over:
+			##AI player against itself
+			col = ai.minimax(np.flip(board, 0), PLAYER, 5, -math.inf, math.inf)[1] # move is the column
 
-			if event.type == pygame.MOUSEMOTION:
-				pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
-				posx = event.pos[0]
-				if turn == PLAYER:
-					pygame.draw.circle(screen, RED, (posx, int(SQUARESIZE/2)), RADIUS)
+			if is_valid_location(board, col):
+				pygame.time.wait(500)
+				row = get_next_open_row(board, col)
+				drop_piece(board, row, col, PLAYER)
 
-			pygame.display.update()
+			if winning_move(board, AI):
+				label = myfont.render("AI Depth 5 wins!!", 1, YELLOW)
+				screen.blit(label, (40,10))
+				game_over = True
+			
+			draw_board(board)
+			turn = AI
+			##AI play against actual human
+			# if event.type == pygame.MOUSEMOTION:
+			# 	pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
+			# 	posx = event.pos[0]
+			# 	if turn == PLAYER:
+			# 		pygame.draw.circle(screen, RED, (posx, int(SQUARESIZE/2)), RADIUS)
 
-			if event.type == pygame.MOUSEBUTTONDOWN:
-				pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
-				#print(event.pos)
-				# Ask for Player 1 Input
-				if turn == PLAYER:
-					posx = event.pos[0]
-					col = int(math.floor(posx/SQUARESIZE))
+			# pygame.display.update()
 
-					if is_valid_location(board, col):
-						row = get_next_open_row(board, col)
-						drop_piece(board, row, col, PLAYER)
+			# if event.type == pygame.MOUSEBUTTONDOWN:
+			# 	pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
+			# 	#print(event.pos)
+			# 	# Ask for Player 1 Input
+			# 	if turn == PLAYER:
+			# 		posx = event.pos[0]
+			# 		col = int(math.floor(posx/SQUARESIZE))
 
-						if winning_move(board, PLAYER):
-							label = myfont.render("Human Wins!!", 1, RED)
-							screen.blit(label, (40,10))
-							game_over = True
+			# 		if is_valid_location(board, col):
+			# 			row = get_next_open_row(board, col)
+			# 			drop_piece(board, row, col, PLAYER)
 
-						turn = AI
+			# 			if winning_move(board, PLAYER):
+			# 				label = myfont.render("Human Wins!!", 1, RED)
+			# 				screen.blit(label, (40,10))
+			# 				game_over = True
 
-						# print_board(board)
-						draw_board(board)
+			# 			turn = AI
+
+			# 			# print_board(board)
+			# 			draw_board(board)
 
 
 			# # Ask for Player 2 Input
@@ -152,7 +167,7 @@ if __name__ == "__main__":
 					drop_piece(board, row, col, AI)
 
 				if winning_move(board, AI):
-					label = myfont.render("AI wins!!", 1, YELLOW)
+					label = myfont.render("AI depth 4 wins!!", 1, YELLOW)
 					screen.blit(label, (40,10))
 					game_over = True
 
