@@ -13,6 +13,7 @@ BLUE = (0,0,255)
 BLACK = (0,0,0)
 RED = (255,0,0)
 YELLOW = (255,255,0)
+ORANGE = (255,165,0)
 
 ROW_COUNT = 6
 COLUMN_COUNT = 7
@@ -119,11 +120,16 @@ if __name__ == "__main__":
 
 			pygame.display.update()
 
+			#check for tie
+			#if 0 not in board[ROW_COUNT-1]:
+			
+
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
-				#print(event.pos)
+
 				# Ask for Player 1 Input
 				if turn == PLAYER:
+
 					posx = event.pos[0]
 					col = int(math.floor(posx/SQUARESIZE))
 
@@ -135,15 +141,19 @@ if __name__ == "__main__":
 							label = myfont.render("Human Wins!!", 1, RED)
 							screen.blit(label, (40,10))
 							game_over = True
+					
+						if 0 not in board[ROW_COUNT-1]:
+							label = myfont.render("It's a tie!", 1, ORANGE)
+							screen.blit(label, (40,10))
+							game_over = True
 
-						turn = AI
-
-						# print_board(board)
-						draw_board(board)
+					turn = AI
+					draw_board(board)
 
 
 			# # Ask for Player 2 Input
 			if turn == AI and not game_over:
+
 				col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf)[1] # move is the column
 
 				if is_valid_location(board, col):
@@ -156,6 +166,12 @@ if __name__ == "__main__":
 					screen.blit(label, (40,10))
 					game_over = True
 
-					# print_board(board)
+				if 0 not in board[ROW_COUNT-1]:
+						label = myfont.render("It's a tie!", 1, ORANGE)
+						screen.blit(label, (40,10))
+						game_over = True
+
 				draw_board(board)
 				turn = PLAYER
+			
+				

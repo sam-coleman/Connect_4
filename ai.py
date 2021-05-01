@@ -49,7 +49,7 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
                 print("CRISIS")
             alpha = max(max(results)[0], alpha)
             if alpha > beta:
-                print('alpha beta thing', alpha, beta, result)
+                #print('alpha beta thing', alpha, beta, result)
                 break
         try: 
             return max(results)
@@ -70,7 +70,7 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
                 print("CRISIS")
             beta = min(min(results)[0], beta)
             if alpha > beta:
-                print('ab thing in minim', alpha, beta)
+                #print('ab thing in minim', alpha, beta)
                 break 
         try:
             return min(results)
