@@ -20,9 +20,6 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
         player = 1: opponent (minimzer)
         prev_move: int representing last column played in
     """
-    #what is move? how calculate? column?
-    #TODO no possible moves? what return?
-
     #check if someone has won
     if calc_adjacent(board, PLAYER, 4) > 0:
         #SUPER BAD--Lose
@@ -45,11 +42,8 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             result = ((minimax(copy.deepcopy(new_board), PLAYER, depth-1, alpha, beta)[0], move))
             results.append(result)
             val = max(max_val, result[0])
-            if val != result[0]:
-                print("CRISIS")
             alpha = max(max(results)[0], alpha)
             if alpha > beta:
-                print('alpha beta thing', alpha, beta, result)
                 break
         try: 
             return max(results)
@@ -66,11 +60,8 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             result = ((minimax(copy.deepcopy(new_board), AI, depth-1, alpha, beta)[0], move))
             results.append(result)
             val = min(min_val,result[0])
-            if val != result[0]:
-                print("CRISIS")
             beta = min(min(results)[0], beta)
             if alpha > beta:
-                print('ab thing in minim', alpha, beta)
                 break 
         try:
             return min(results)
@@ -162,7 +153,7 @@ def calc_adjacent(board, player, num):
                     total += 1
 
     else: #num == 2
-
+        
         # Check horizontal locations
         for c in range(COLUMN_COUNT-1):
             for r in range(ROW_COUNT):
@@ -197,7 +188,7 @@ def find_moves(board, player):
     valid_moves = []
 
     for i in range(0, len(board[0])): # Looking at the first row
-    	if board[0][i] == 0: #(np.flip(board, 0)
+    	if board[0][i] == 0: 
     		# we want to add 1 to indicate there's 1 less spot in this column
     		valid_moves.append(i)
 
@@ -213,8 +204,6 @@ def make_move(board, move, player):
     global ROW_COUNT
 
     valid_moves = find_moves(board, player)
-    # if len(valid_moves) == 0:
-    #     return
     stuff_in_col = 0
 
     if move not in valid_moves:
