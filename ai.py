@@ -7,7 +7,7 @@ import sys
 import math
 import copy
 
-from connect4_pygame import (
+from main import (
     ROW_COUNT,
     COLUMN_COUNT,
     AI,
@@ -28,12 +28,11 @@ def minimax(board, player, depth, alpha, beta):
         #SUPER GOOD--Win
         return math.inf, -1
 
-    poss_moves = find_moves(board,AI)
+    poss_moves = find_moves(board)
     if depth == 0 or len(poss_moves) == 0: #reached max recursion
         return calc_heuristic(board), -1
 
     elif player == AI: #AI playing, maximizer
-        poss_moves = find_moves(board,AI)
         results = []  
         #calculate next move
         for move in poss_moves:
@@ -52,7 +51,7 @@ def minimax(board, player, depth, alpha, beta):
             return 0,move
 
     else: #human playing, minimzer
-        poss_moves = find_moves(board,PLAYER)
+        #poss_moves = find_moves(board)
         results = []
         #calculate next move
         for move in poss_moves:
@@ -182,7 +181,7 @@ def calc_adjacent(board, player, num):
 
     return total
 
-def find_moves(board, player):
+def find_moves(board):
     """returns list w/ columns representing possible moves
     """
     # We will check if the column is filled (e.g. you can't add any more pieces to
@@ -205,7 +204,7 @@ def make_move(board, move, player):
 
     global ROW_COUNT
 
-    valid_moves = find_moves(board, player)
+    valid_moves = find_moves(board)
     stuff_in_col = 0
 
     if move not in valid_moves:
