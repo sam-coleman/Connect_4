@@ -136,7 +136,7 @@ if __name__ == "__main__":
 							screen.blit(label, (40,10))
 							game_over = True
 					
-						if 0 not in board[ROW_COUNT-1]:
+						elif 0 not in board[ROW_COUNT-1]:
 							label = myfont.render("It's a tie!", 1, ORANGE)
 							screen.blit(label, (40,10))
 							game_over = True
@@ -160,7 +160,7 @@ if __name__ == "__main__":
 					screen.blit(label, (40,10))
 					game_over = True
 
-				if 0 not in board[ROW_COUNT-1]:
+				elif 0 not in board[ROW_COUNT-1]:
 						label = myfont.render("It's a tie!", 1, ORANGE)
 						screen.blit(label, (40,10))
 						game_over = True
