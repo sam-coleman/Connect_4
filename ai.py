@@ -15,7 +15,7 @@ from connect4_pygame import (
     EMPTY
 )
 
-def minimax(board, player, depth, alpha, beta):#, prev_move):
+def minimax(board, player, depth, alpha, beta):
     """player = 0: AI (maximizer)
         player = 1: opponent (minimzer)
         prev_move: int representing last column played in
@@ -35,13 +35,14 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
     elif player == AI: #AI playing, maximizer
         poss_moves = find_moves(board,AI)
         results = []  
-        max_val = -math.inf      
+        #calculate next move
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
+            #find heuristic of that move tree
             result = ((minimax(copy.deepcopy(new_board), PLAYER, depth-1, alpha, beta)[0], move))
             results.append(result)
-            val = max(max_val, result[0])
+            #alpha beta pruning
             alpha = max(max(results)[0], alpha)
             if alpha > beta:
                 break
@@ -53,14 +54,15 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
     else: #human playing, minimzer
         poss_moves = find_moves(board,PLAYER)
         results = []
-        min_val = math.inf
+        #calculate next move
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
+            #find heuristic of that move tree
             result = ((minimax(copy.deepcopy(new_board), AI, depth-1, alpha, beta)[0], move))
             results.append(result)
-            val = min(min_val,result[0])
             beta = min(min(results)[0], beta)
+            #alpha beta pruning
             if alpha > beta:
                 break 
         try:
