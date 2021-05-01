@@ -1,5 +1,4 @@
-"""Credit for base implementation: https://github.com/sam-coleman/Connect4-Python/blob/master/connect4.py
-
+"""Credit for base Connect 4 implementation: https://github.com/KeithGalli/Connect4-Python/blob/master/connect4.py
 """
 
 import numpy as np
@@ -9,6 +8,7 @@ import math
 import random
 import ai
 
+#define constants
 BLUE = (0,0,255)
 BLACK = (0,0,0)
 RED = (255,0,0)
@@ -24,7 +24,6 @@ AI = 2
 EMPTY = 0
 
 def create_board():
-	#board = np.zeros((ROW_COUNT,COLUMN_COUNT))
 	board = [[0 for col in range(COLUMN_COUNT)] for row in range(ROW_COUNT)]
 	return board
 
@@ -83,7 +82,6 @@ def draw_board(board):
 
 if __name__ == "__main__":
 	board = create_board()
-	# print_board(board)
 	game_over = False
 	turn = PLAYER
 
@@ -120,14 +118,10 @@ if __name__ == "__main__":
 
 			pygame.display.update()
 
-			#check for tie
-			#if 0 not in board[ROW_COUNT-1]:
-			
-
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
 
-				# Ask for Player 1 Input
+				# Ask human for input
 				if turn == PLAYER:
 
 					posx = event.pos[0]
@@ -151,10 +145,10 @@ if __name__ == "__main__":
 					draw_board(board)
 
 
-			# # Ask for Player 2 Input
+			# Ask AI for input
 			if turn == AI and not game_over:
-
-				col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf)[1] # move is the column
+				#determine column to play in (using minimax algorithm)
+				col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf)[1] #move is the column
 
 				if is_valid_location(board, col):
 					pygame.time.wait(500)
