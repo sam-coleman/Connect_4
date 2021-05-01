@@ -153,7 +153,7 @@ def calc_adjacent(board, player, num):
                     total += 1
 
     else: #num == 2
-        
+
         # Check horizontal locations
         for c in range(COLUMN_COUNT-1):
             for r in range(ROW_COUNT):
