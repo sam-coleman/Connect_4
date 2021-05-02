@@ -156,7 +156,7 @@ if __name__ == "__main__":
 					drop_piece(board, row, col, AI)
 
 				if winning_move(board, AI):
-					label = myfont.render("AI depth 4 wins!!", 1, YELLOW)
+					label = myfont.render("AI wins!!", 1, YELLOW)
 					screen.blit(label, (40,10))
 					game_over = True
 
