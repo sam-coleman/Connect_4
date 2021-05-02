@@ -7,7 +7,7 @@ import sys
 import math
 import copy
 
-from connect4_pygame import (
+from main import (
     ROW_COUNT,
     COLUMN_COUNT,
     AI,
@@ -15,14 +15,11 @@ from connect4_pygame import (
     EMPTY
 )
 
-def minimax(board, player, depth, alpha, beta):#, prev_move):
+def minimax(board, player, depth, alpha, beta):
     """player = 0: AI (maximizer)
         player = 1: opponent (minimzer)
         prev_move: int representing last column played in
     """
-    #what is move? how calculate? column?
-    #TODO no possible moves? what return?
-
     #check if someone has won
     if calc_adjacent(board, PLAYER, 4) > 0:
         #SUPER BAD--Lose
@@ -31,25 +28,22 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
         #SUPER GOOD--Win
         return math.inf, -1
 
-    poss_moves = find_moves(board,AI)
+    poss_moves = find_moves(board)
     if depth == 0 or len(poss_moves) == 0: #reached max recursion
         return calc_heuristic(board), -1
 
     elif player == AI: #AI playing, maximizer
-        poss_moves = find_moves(board,AI)
         results = []  
-        max_val = -math.inf      
+        #calculate next move
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
+            #find heuristic of that move tree
             result = ((minimax(copy.deepcopy(new_board), PLAYER, depth-1, alpha, beta)[0], move))
             results.append(result)
-            val = max(max_val, result[0])
-            if val != result[0]:
-                print("CRISIS")
+            #alpha beta pruning
             alpha = max(max(results)[0], alpha)
             if alpha > beta:
-                print('alpha beta thing', alpha, beta, result)
                 break
         try: 
             return max(results)
@@ -57,20 +51,18 @@ def minimax(board, player, depth, alpha, beta):#, prev_move):
             return 0,move
 
     else: #human playing, minimzer
-        poss_moves = find_moves(board,PLAYER)
+        #poss_moves = find_moves(board)
         results = []
-        min_val = math.inf
+        #calculate next move
         for move in poss_moves:
             new_board = copy.deepcopy(board)
             new_board = make_move(new_board, move, player)
+            #find heuristic of that move tree
             result = ((minimax(copy.deepcopy(new_board), AI, depth-1, alpha, beta)[0], move))
             results.append(result)
-            val = min(min_val,result[0])
-            if val != result[0]:
-                print("CRISIS")
             beta = min(min(results)[0], beta)
+            #alpha beta pruning
             if alpha > beta:
-                print('ab thing in minim', alpha, beta)
                 break 
         try:
             return min(results)
@@ -191,7 +183,7 @@ def calc_adjacent(board, player, num):
 
     return total
 
-def find_moves(board, player):
+def find_moves(board):
     """returns list w/ columns representing possible moves
     """
     # We will check if the column is filled (e.g. you can't add any more pieces to
@@ -199,7 +191,7 @@ def find_moves(board, player):
     valid_moves = []
 
     for i in range(0, len(board[0])): # Looking at the first row
-    	if board[0][i] == 0: #(np.flip(board, 0)
+    	if board[0][i] == 0: 
     		# we want to add 1 to indicate there's 1 less spot in this column
     		valid_moves.append(i)
 
@@ -214,9 +206,7 @@ def make_move(board, move, player):
 
     global ROW_COUNT
 
-    valid_moves = find_moves(board, player)
-    # if len(valid_moves) == 0:
-    #     return
+    valid_moves = find_moves(board)
     stuff_in_col = 0
 
     if move not in valid_moves:

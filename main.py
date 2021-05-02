@@ -1,5 +1,4 @@
-"""Credit for base implementation: https://github.com/sam-coleman/Connect4-Python/blob/master/connect4.py
-
+"""Credit for base Connect 4 implementation: https://github.com/KeithGalli/Connect4-Python/blob/master/connect4.py
 """
 
 import numpy as np
@@ -9,10 +8,12 @@ import math
 import random
 import ai
 
+#define constants
 BLUE = (0,0,255)
 BLACK = (0,0,0)
 RED = (255,0,0)
 YELLOW = (255,255,0)
+ORANGE = (255,165,0)
 
 ROW_COUNT = 6
 COLUMN_COUNT = 7
@@ -23,7 +24,6 @@ AI = 2
 EMPTY = 0
 
 def create_board():
-	#board = np.zeros((ROW_COUNT,COLUMN_COUNT))
 	board = [[0 for col in range(COLUMN_COUNT)] for row in range(ROW_COUNT)]
 	return board
 
@@ -82,7 +82,6 @@ def draw_board(board):
 
 if __name__ == "__main__":
 	board = create_board()
-	# print_board(board)
 	game_over = False
 	turn = PLAYER
 
@@ -110,56 +109,46 @@ if __name__ == "__main__":
 				sys.exit()
 
 		if not game_over:
-			##AI player against itself
-			col = ai.minimax(np.flip(board, 0), PLAYER, 5, -math.inf, math.inf)[1] # move is the column
 
-			if is_valid_location(board, col):
-				pygame.time.wait(500)
-				row = get_next_open_row(board, col)
-				drop_piece(board, row, col, PLAYER)
+			if event.type == pygame.MOUSEMOTION:
+				pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
+				posx = event.pos[0]
+				if turn == PLAYER:
+					pygame.draw.circle(screen, RED, (posx, int(SQUARESIZE/2)), RADIUS)
 
-			if winning_move(board, AI):
-				label = myfont.render("AI Depth 5 wins!!", 1, YELLOW)
-				screen.blit(label, (40,10))
-				game_over = True
-			
-			draw_board(board)
-			turn = AI
-			##AI play against actual human
-			# if event.type == pygame.MOUSEMOTION:
-			# 	pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
-			# 	posx = event.pos[0]
-			# 	if turn == PLAYER:
-			# 		pygame.draw.circle(screen, RED, (posx, int(SQUARESIZE/2)), RADIUS)
+			pygame.display.update()
 
-			# pygame.display.update()
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
 
-			# if event.type == pygame.MOUSEBUTTONDOWN:
-			# 	pygame.draw.rect(screen, BLACK, (0,0, width, SQUARESIZE))
-			# 	#print(event.pos)
-			# 	# Ask for Player 1 Input
-			# 	if turn == PLAYER:
-			# 		posx = event.pos[0]
-			# 		col = int(math.floor(posx/SQUARESIZE))
+				# Ask human for input
+				if turn == PLAYER:
 
-			# 		if is_valid_location(board, col):
-			# 			row = get_next_open_row(board, col)
-			# 			drop_piece(board, row, col, PLAYER)
+					posx = event.pos[0]
+					col = int(math.floor(posx/SQUARESIZE))
 
-			# 			if winning_move(board, PLAYER):
-			# 				label = myfont.render("Human Wins!!", 1, RED)
-			# 				screen.blit(label, (40,10))
-			# 				game_over = True
+					if is_valid_location(board, col):
+						row = get_next_open_row(board, col)
+						drop_piece(board, row, col, PLAYER)
 
-			# 			turn = AI
+						if winning_move(board, PLAYER):
+							label = myfont.render("Human Wins!!", 1, RED)
+							screen.blit(label, (40,10))
+							game_over = True
+					
+						elif 0 not in board[ROW_COUNT-1]:
+							label = myfont.render("It's a tie!", 1, ORANGE)
+							screen.blit(label, (40,10))
+							game_over = True
 
-			# 			# print_board(board)
-			# 			draw_board(board)
+					turn = AI
+					draw_board(board)
 
 
-			# # Ask for Player 2 Input
+			# Ask AI for input
 			if turn == AI and not game_over:
-				col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf)[1] # move is the column
+				#determine column to play in (using minimax algorithm)
+				col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf)[1] #move is the column
 
 				if is_valid_location(board, col):
 					pygame.time.wait(500)
@@ -171,6 +160,12 @@ if __name__ == "__main__":
 					screen.blit(label, (40,10))
 					game_over = True
 
-					# print_board(board)
+				elif 0 not in board[ROW_COUNT-1]:
+						label = myfont.render("It's a tie!", 1, ORANGE)
+						screen.blit(label, (40,10))
+						game_over = True
+
 				draw_board(board)
 				turn = PLAYER
+			
+				
