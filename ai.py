@@ -23,10 +23,10 @@ def minimax(board, player, depth, alpha, beta):
     #check if someone has won
     if calc_adjacent(board, PLAYER, 4) > 0:
         #SUPER BAD--Lose
-        return -math.inf, -1
+        return -1,000,000,000 * (depth+1), -1 #-math.inf, -1
     if calc_adjacent(board, AI, 4) > 0:
         #SUPER GOOD--Win
-        return math.inf, -1
+        return 1,000,000,000 * (depth+1), -1#math.inf, -1
 
     poss_moves = find_moves(board)
     if depth == 0 or len(poss_moves) == 0: #reached max recursion
@@ -86,13 +86,15 @@ def calc_heuristic(board):
     enemy_threes = calc_adjacent(board, PLAYER, 3)
     enemy_twos = calc_adjacent(board, PLAYER, 2)
 
-    if our_fours >= 1:
-        rating = math.inf
-    elif enemy_fours >= 1:
-        rating = -math.inf
-    else:
+    # if our_fours >= 1:
+    #     print("OUR FOURS IN CALC HUERISTIC")
+    #     rating = math.inf
+    # elif enemy_fours >= 1:
+    #     print("ENEMY FOURS IN CALC HEURISTIC")
+    #     rating = -math.inf
+    # else:
     	# For now, we are not going to prevent double-counting (might change later)
-    	rating = (our_threes*(1000) + our_twos*(20) + enemy_threes*(-1100) + enemy_twos*(-10)) #our_fours*(1000000) +
+    rating = (our_threes*(1000) + our_twos*(20) + enemy_threes*(-1100) + enemy_twos*(-10)) #our_fours*(1000000) +
     return rating
 
 def calc_adjacent(board, player, num):
