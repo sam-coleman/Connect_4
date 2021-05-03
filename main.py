@@ -148,8 +148,8 @@ if __name__ == "__main__":
 			# Ask AI for input
 			if turn == AI and not game_over:
 				#determine column to play in (using minimax algorithm)
-				col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf)[1] #move is the column
-
+				heur, col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf) #move is the column
+				
 				if is_valid_location(board, col):
 					pygame.time.wait(500)
 					row = get_next_open_row(board, col)

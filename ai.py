@@ -20,13 +20,14 @@ def minimax(board, player, depth, alpha, beta):
         player = 1: opponent (minimzer)
         prev_move: int representing last column played in
     """
+
+    if calc_adjacent(board, AI, 4) > 0:
+        #SUPER GOOD--Win
+        return 1000000000 * (depth+1), -1#math.inf, -1
     #check if someone has won
     if calc_adjacent(board, PLAYER, 4) > 0:
         #SUPER BAD--Lose
-        return -math.inf, -1
-    if calc_adjacent(board, AI, 4) > 0:
-        #SUPER GOOD--Win
-        return math.inf, -1
+        return -100000000000 * (depth+1), -1 #-math.inf, -1
 
     poss_moves = find_moves(board)
     if depth == 0 or len(poss_moves) == 0: #reached max recursion
@@ -45,6 +46,7 @@ def minimax(board, player, depth, alpha, beta):
             alpha = max(max(results)[0], alpha)
             if alpha > beta:
                 break
+
         try: 
             return max(results)
         except:
@@ -77,31 +79,40 @@ def calc_heuristic(board):
     the AI winning and an equal weight for the rest of the streaks.
     """
     # AI = 0, calculating the streaks the AI has
-    our_fours = calc_adjacent(board, AI, 4)
+    #our_fours = calc_adjacent(board, AI, 4)
     our_threes = calc_adjacent(board, AI, 3)
     our_twos = calc_adjacent(board, AI, 2)
-
+    our_middle_perc = per_in_center(board)
     # player = 1, calculating the streaks that the player has
-    enemy_fours = calc_adjacent(board, PLAYER, 4)
+    #enemy_fours = calc_adjacent(board, PLAYER, 4)
     enemy_threes = calc_adjacent(board, PLAYER, 3)
     enemy_twos = calc_adjacent(board, PLAYER, 2)
 
-    if enemy_fours >= 1:
-    	# avoid at ALL COST
-    	rating = -math.inf
-    else:
-    	# For now, we are not going to prevent double-counting (might change later)
-    	rating = (our_fours*(1000000) + our_threes*(1000) + our_twos*(10) + enemy_threes*(-1000) + enemy_twos*(-10))
+
+    # For now, we are not going to prevent double-counting (might change later)
+    rating = (our_middle_perc * 1050 + our_threes*(1000) + our_twos*(20) + enemy_threes*(-1100) + enemy_twos*(-10)) #our_fours*(1000000) +
     return rating
+
+def per_in_center(board):
+    num_tokens = 0
+    for c in range(2,COLUMN_COUNT-2):
+        for r in range(ROW_COUNT-3, ROW_COUNT):
+            if board[r][c] == AI:
+                num_tokens += 1
+    
+    return num_tokens / 9
+
 
 def calc_adjacent(board, player, num):
     """num: how many we care about in a "row"
     need to deal with 2 in a row occurs in a 4 in a row, don't count sub-in-a-rows
-
     #return: # instances with num in a row for player
     """
     total = 0
-
+    if player == PLAYER:
+        other_player = AI
+    else:
+        other_player = PLAYER
     #want to find 4 in a rows
     if num == 4:
 	# Check horizontal locations
@@ -129,32 +140,66 @@ def calc_adjacent(board, player, num):
                     total += 1
 
     elif num == 3:
-        	# Check horizontal locations
+        #ACTUAL 3 IN A ROWS, W/ NO BREAKS
+        # Check horizontal locations
         for c in range(COLUMN_COUNT-2):
             for r in range(ROW_COUNT):
-                if board[r][c] == player and board[r][c+1] == player and board[r][c+2] == player:
+                if board[r][c] == player and board[r][c+1] == player and board[r][c+2] == player: #and c+3 < COLUMN_COUNT - 1: #and board[r][c+2] < COLUMN_COUNT:
                     total += 1
 
         # Check vertical locations
         for c in range(COLUMN_COUNT):
             for r in range(ROW_COUNT-2):
-                if board[r][c] == player and board[r+1][c] == player and board[r+2][c] == player:
+                if board[r][c] == player and board[r+1][c] == player and board[r+2][c] == player: #and r+3 < ROW_COUNT - 1:
                     total += 1
 
         # Check positively sloped diaganols
         for c in range(COLUMN_COUNT-2):
             for r in range(ROW_COUNT-2):
-                if board[r][c] == player and board[r+1][c+1] == player and board[r+2][c+2] == player:
+                if board[r][c] == player and board[r+1][c+1] == player and board[r+2][c+2] == player: #and r+3 < ROW_COUNT - 1 and c+3 < COLUMN_COUNT - 1:
                     total += 1
 
         # Check negatively sloped diaganols
         for c in range(COLUMN_COUNT-2):
             for r in range(2, ROW_COUNT):
-                if board[r][c] == player and board[r-1][c+1] == player and board[r-2][c+2] == player:
+                if board[r][c] == player and board[r-1][c+1] == player and board[r-2][c+2] == player: #and c+3 < COLUMN_COUNT - 1:
+                    total += 1
+        
+        #3 IN A ROWS W/ AN EMPTY SQUARE IN THE MIDDLE
+        #checks horizaontal locations
+        for c in range(COLUMN_COUNT-3):
+            for r in range(ROW_COUNT):
+                if board[r][c] == player and board[r][c+1] == 0 and board[r][c+2] == player and board[r][c+3] == player:
+                    total += 1
+                elif board[r][c] == player and board[r][c+1] == player and board[r][c+2] == 0 and board[r][c+3] == player:
+                    total += 1
+
+        # Check vertical locations
+        for c in range(COLUMN_COUNT):
+            for r in range(ROW_COUNT-3):
+                if board[r][c] == player and board[r+1][c] == 0 and board[r+2][c] == player and board[r+3][c] == player:
+                    total += 1
+                elif board[r][c] == player and board[r+1][c] == player and board[r+2][c] == 0 and board[r+3][c] == player:
+                    total += 1
+
+        # Check positively sloped diaganols
+        for c in range(COLUMN_COUNT-3):
+            for r in range(ROW_COUNT-3):
+                if board[r][c] == player and board[r+1][c+1] == 0 and board[r+2][c+2] == player and board[r+3][c+3] == player:
+                    total += 1
+                elif board[r][c] == player and board[r+1][c+1] == player and board[r+2][c+2] == 0 and board[r+3][c+3] == player:
+                    total += 1
+
+        # Check negatively sloped diaganols
+        for c in range(COLUMN_COUNT-3):
+            for r in range(3, ROW_COUNT):
+                if board[r][c] == player and board[r-1][c+1] == 0 and board[r-2][c+2] == player and board[r-3][c+3] == player:
+                    total += 1
+                elif board[r][c] == player and board[r-1][c+1] == player and board[r-2][c+2] == 0 and board[r-3][c+3] == player:
                     total += 1
 
     else: #num == 2
-
+        # ACTUAL 2 IN A ROWS, W/ NO BREAKS
         # Check horizontal locations
         for c in range(COLUMN_COUNT-1):
             for r in range(ROW_COUNT):
@@ -178,7 +223,7 @@ def calc_adjacent(board, player, num):
             for r in range(1, ROW_COUNT):
                 if board[r][c] == player and board[r-1][c+1] == player:
                     total += 1
-
+    
     return total
 
 def find_moves(board):
