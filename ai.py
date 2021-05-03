@@ -20,13 +20,14 @@ def minimax(board, player, depth, alpha, beta):
         player = 1: opponent (minimzer)
         prev_move: int representing last column played in
     """
+
+    if calc_adjacent(board, AI, 4) > 0:
+        #SUPER GOOD--Win
+        return 1000000000 * (depth+1), -1#math.inf, -1
     #check if someone has won
     if calc_adjacent(board, PLAYER, 4) > 0:
         #SUPER BAD--Lose
-        return -1,000,000,000 * (depth+1), -1 #-math.inf, -1
-    if calc_adjacent(board, AI, 4) > 0:
-        #SUPER GOOD--Win
-        return 1,000,000,000 * (depth+1), -1#math.inf, -1
+        return -100000000000 * (depth+1), -1 #-math.inf, -1
 
     poss_moves = find_moves(board)
     if depth == 0 or len(poss_moves) == 0: #reached max recursion
@@ -45,6 +46,7 @@ def minimax(board, player, depth, alpha, beta):
             alpha = max(max(results)[0], alpha)
             if alpha > beta:
                 break
+
         try: 
             return max(results)
         except:
@@ -77,25 +79,29 @@ def calc_heuristic(board):
     the AI winning and an equal weight for the rest of the streaks.
     """
     # AI = 0, calculating the streaks the AI has
-    our_fours = calc_adjacent(board, AI, 4)
+    #our_fours = calc_adjacent(board, AI, 4)
     our_threes = calc_adjacent(board, AI, 3)
     our_twos = calc_adjacent(board, AI, 2)
-
+    our_middle_perc = per_in_center(board)
     # player = 1, calculating the streaks that the player has
-    enemy_fours = calc_adjacent(board, PLAYER, 4)
+    #enemy_fours = calc_adjacent(board, PLAYER, 4)
     enemy_threes = calc_adjacent(board, PLAYER, 3)
     enemy_twos = calc_adjacent(board, PLAYER, 2)
 
-    # if our_fours >= 1:
-    #     print("OUR FOURS IN CALC HUERISTIC")
-    #     rating = math.inf
-    # elif enemy_fours >= 1:
-    #     print("ENEMY FOURS IN CALC HEURISTIC")
-    #     rating = -math.inf
-    # else:
-    	# For now, we are not going to prevent double-counting (might change later)
-    rating = (our_threes*(1000) + our_twos*(20) + enemy_threes*(-1100) + enemy_twos*(-10)) #our_fours*(1000000) +
+
+    # For now, we are not going to prevent double-counting (might change later)
+    rating = (our_middle_perc * 1050 + our_threes*(1000) + our_twos*(20) + enemy_threes*(-1100) + enemy_twos*(-10)) #our_fours*(1000000) +
     return rating
+
+def per_in_center(board):
+    num_tokens = 0
+    for c in range(2,COLUMN_COUNT-2):
+        for r in range(ROW_COUNT-3, ROW_COUNT):
+            if board[r][c] == AI:
+                num_tokens += 1
+    
+    return num_tokens / 9
+
 
 def calc_adjacent(board, player, num):
     """num: how many we care about in a "row"

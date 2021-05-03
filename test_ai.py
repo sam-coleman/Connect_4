@@ -6,7 +6,8 @@ import pytest
 from ai import (calc_adjacent,
                 calc_heuristic,
                 find_moves,
-                make_move)
+                make_move,
+                per_in_center)
 
 ROW_COUNT = 6
 COLUMN_COUNT = 7
@@ -59,7 +60,7 @@ def test_find_moves(moves, result):
     board = create_board()
     for move in moves:
         board = make_move(board, move, AI)
-    assert (find_moves(board, AI)) == result 
+    assert (find_moves(board)) == result 
 
 
 make_move_cases = [
@@ -89,3 +90,13 @@ calc_adjacent_cases = [
 @pytest.mark.parametrize("board, player, number, result", calc_adjacent_cases)
 def test_calc_adjacent(board, player, number, result):
     assert calc_adjacent(board,player,number) == result
+
+per_in_center_cases = [
+    (create_board([[5,2,AI]]), 1/9),
+    (create_full_board(), 1)
+]
+@pytest.mark.parametrize("board, result", per_in_center_cases)
+def test_per_in_center(board, result):
+    assert per_in_center(board) == result
+
+# print(per_in_center(create_board([[5,2,AI]])))
