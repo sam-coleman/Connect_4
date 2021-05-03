@@ -141,8 +141,8 @@ if __name__ == "__main__":
 							screen.blit(label, (40,10))
 							game_over = True
 
-					turn = AI
-					draw_board(board)
+						turn = AI
+						draw_board(board)
 
 
 			# Ask AI for input
