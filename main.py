@@ -6,7 +6,9 @@ import pygame
 import sys
 import math
 import random
+import timeit
 import ai
+import matplotlib.pyplot as plt
 
 #define constants
 BLUE = (0,0,255)
@@ -22,6 +24,9 @@ PLAYER = 1
 AI = 2
 
 EMPTY = 0
+
+timing_results = []
+move_number = 0
 
 def create_board():
 	board = [[0 for col in range(COLUMN_COUNT)] for row in range(ROW_COUNT)]
@@ -80,6 +85,33 @@ def draw_board(board):
 				pygame.draw.circle(screen, YELLOW, (int(c*SQUARESIZE+SQUARESIZE/2), height-int(r*SQUARESIZE+SQUARESIZE/2)), RADIUS)
 	pygame.display.update()
 
+def test_plots(runtime_to_plot):
+	# Data for plotting
+	fig, ax = plt.subplots()
+	moves_to_plot = []
+
+	for i in range(0, len(timing_results)):
+		moves_to_plot.append(i+1)
+	# moves_to_plot = []
+	# for i in range(0, len(timing_results)-1):
+	# 	moves_to_plot.append(timing_results[i][0])
+	#
+	# runtime_to_plot = []
+	# for i in range(0, len(timing_results)-1):
+	# 	runtime_to_plot.append(timing_results[i][1])
+
+	ax.plot(moves_to_plot, runtime_to_plot, label="")
+	ax.scatter(moves_to_plot, runtime_to_plot, s=80, marker=">")
+
+	ax.set(xlabel='Move Number', ylabel='Runtime (s)', title='Runtime of MiniMax Over Time')
+	ax.grid()
+
+	fig.savefig("connect4cks_runtime_plot.png")
+	plt.show()
+	plt.legend()
+
+
+
 if __name__ == "__main__":
 	board = create_board()
 	game_over = False
@@ -135,11 +167,23 @@ if __name__ == "__main__":
 							label = myfont.render("Human Wins!!", 1, RED)
 							screen.blit(label, (40,10))
 							game_over = True
-					
+							outputfile=open('connect4cks_output.txt','w')
+							i = 0
+							for item in timing_results:
+								outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
+							outputfile.close()
+							test_plots(timing_results)
+
 						elif 0 not in board[ROW_COUNT-1]:
 							label = myfont.render("It's a tie!", 1, ORANGE)
 							screen.blit(label, (40,10))
 							game_over = True
+							outputfile=open('connect4cks_output.txt','w')
+							i = 0
+							for item in timing_results:
+								outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
+							outputfile.close()
+							test_plots(timing_results)
 
 						turn = AI
 						draw_board(board)
@@ -148,8 +192,16 @@ if __name__ == "__main__":
 			# Ask AI for input
 			if turn == AI and not game_over:
 				#determine column to play in (using minimax algorithm)
+				# TIMING!
+
+				start = timeit.default_timer()
 				heur, col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf) #move is the column
-				
+				stop = timeit.default_timer()
+				move_number += 1
+				timing_results.append(stop - start)
+				print('-------Runtime: %s----------\n' % (stop - start))
+				# end timing
+
 				if is_valid_location(board, col):
 					pygame.time.wait(500)
 					row = get_next_open_row(board, col)
@@ -159,13 +211,24 @@ if __name__ == "__main__":
 					label = myfont.render("AI wins!!", 1, YELLOW)
 					screen.blit(label, (40,10))
 					game_over = True
+					outputfile=open('connect4cks_output.txt','w')
+					i = 0
+					for item in timing_results:
+						i += 1
+						outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
+					outputfile.close()
+					test_plots(timing_results)
 
 				elif 0 not in board[ROW_COUNT-1]:
 						label = myfont.render("It's a tie!", 1, ORANGE)
 						screen.blit(label, (40,10))
 						game_over = True
+						outputfile=open('connect4cks_output.txt','w')
+						i = 0
+						for item in timing_results:
+							outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
+						outputfile.close()
+						test_plots(timing_results)
 
 				draw_board(board)
 				turn = PLAYER
-			
-				
