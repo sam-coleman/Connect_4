@@ -9,6 +9,7 @@ import random
 import timeit
 import ai
 import matplotlib.pyplot as plt
+# import faulthandler; faulthandler.enable()
 
 #define constants
 BLUE = (0,0,255)
@@ -90,25 +91,17 @@ def test_plots(runtime_to_plot):
 	fig, ax = plt.subplots()
 	moves_to_plot = []
 
-	for i in range(0, len(timing_results)):
-		moves_to_plot.append(i+1)
-	# moves_to_plot = []
-	# for i in range(0, len(timing_results)-1):
-	# 	moves_to_plot.append(timing_results[i][0])
-	#
-	# runtime_to_plot = []
-	# for i in range(0, len(timing_results)-1):
-	# 	runtime_to_plot.append(timing_results[i][1])
+	for i in range(1, len(timing_results)+1):
+		moves_to_plot.append(i)
 
-	ax.plot(moves_to_plot, runtime_to_plot, label="")
+	ax.plot(moves_to_plot, runtime_to_plot)
 	ax.scatter(moves_to_plot, runtime_to_plot, s=80, marker=">")
 
-	ax.set(xlabel='Move Number', ylabel='Runtime (s)', title='Runtime of MiniMax Over Time')
+	#ax.set(xlabel='Move Number', ylabel='Runtime (s)', title='Runtime of MiniMax Over Time')
 	ax.grid()
 
-	fig.savefig("connect4cks_runtime_plot.png")
+	#fig.savefig("connect4cks_runtime_plot.png")
 	plt.show()
-	plt.legend()
 
 
 
