@@ -91,16 +91,16 @@ def test_plots(runtime_to_plot):
 	fig, ax = plt.subplots()
 	moves_to_plot = []
 
-	for i in range(1, len(timing_results)+1):
-		moves_to_plot.append(i)
+	for i in range(0, len(timing_results)):
+		moves_to_plot.append(i+1)
 
 	ax.plot(moves_to_plot, runtime_to_plot)
 	ax.scatter(moves_to_plot, runtime_to_plot, s=80, marker=">")
 
-	#ax.set(xlabel='Move Number', ylabel='Runtime (s)', title='Runtime of MiniMax Over Time')
+	ax.set(xlabel='Move Number', ylabel='Runtime (s)', title='Runtime of MiniMax Over Time')
 	ax.grid()
 
-	#fig.savefig("connect4cks_runtime_plot.png")
+	fig.savefig("connect4cks_runtime_plot.png")
 	plt.show()
 
 
@@ -128,9 +128,16 @@ if __name__ == "__main__":
 	myfont = pygame.font.SysFont("monospace", 75)
 
 	while True:
-
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
+				outputfile=open('connect4cks_output.txt','a')
+				i = 0
+				for item in timing_results:
+					i +=1
+					outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
+				outputfile.writelines('\n')
+				outputfile.close()
+				test_plots(timing_results)
 				sys.exit()
 
 		if not game_over:
@@ -160,23 +167,11 @@ if __name__ == "__main__":
 							label = myfont.render("Human Wins!!", 1, RED)
 							screen.blit(label, (40,10))
 							game_over = True
-							outputfile=open('connect4cks_output.txt','w')
-							i = 0
-							for item in timing_results:
-								outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
-							outputfile.close()
-							test_plots(timing_results)
 
 						elif 0 not in board[ROW_COUNT-1]:
 							label = myfont.render("It's a tie!", 1, ORANGE)
 							screen.blit(label, (40,10))
 							game_over = True
-							outputfile=open('connect4cks_output.txt','w')
-							i = 0
-							for item in timing_results:
-								outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
-							outputfile.close()
-							test_plots(timing_results)
 
 						turn = AI
 						draw_board(board)
@@ -204,24 +199,11 @@ if __name__ == "__main__":
 					label = myfont.render("AI wins!!", 1, YELLOW)
 					screen.blit(label, (40,10))
 					game_over = True
-					outputfile=open('connect4cks_output.txt','w')
-					i = 0
-					for item in timing_results:
-						i += 1
-						outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
-					outputfile.close()
-					test_plots(timing_results)
 
 				elif 0 not in board[ROW_COUNT-1]:
 						label = myfont.render("It's a tie!", 1, ORANGE)
 						screen.blit(label, (40,10))
 						game_over = True
-						outputfile=open('connect4cks_output.txt','w')
-						i = 0
-						for item in timing_results:
-							outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
-						outputfile.close()
-						test_plots(timing_results)
 
 				draw_board(board)
 				turn = PLAYER
