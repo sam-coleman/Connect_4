@@ -22,6 +22,6 @@ if __name__=="__main__":
 plt.plot(avg_time)
 plt.xlabel('move number')
 plt.ylabel('time (s)')
-plt.title(f"Average time per move for {len(times[0])} games")
+plt.title(f"Average time per move for {len(times[0])} games at depth 4")
 plt.show()
 
