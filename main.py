@@ -9,7 +9,6 @@ import random
 import timeit
 import ai
 import matplotlib.pyplot as plt
-# import faulthandler; faulthandler.enable()
 
 #define constants
 BLUE = (0,0,255)
@@ -135,7 +134,6 @@ if __name__ == "__main__":
 				for item in timing_results:
 					i +=1
 					outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
-				outputfile.writelines('\n')
 				outputfile.close()
 				test_plots(timing_results)
 				sys.exit()
