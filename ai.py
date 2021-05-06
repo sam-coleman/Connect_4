@@ -6,6 +6,7 @@ import pygame
 import sys
 import math
 import copy
+import random
 
 from main import (
     ROW_COUNT,
@@ -48,7 +49,9 @@ def minimax(board, player, depth, alpha, beta):
                 break
 
         try: 
-            return max(results)
+            max_heur = max([heur[0] for heur in results])
+            max_results = [key for key in results if key[0] == max_heur]
+            return random.choice(max_results)
         except:
             return 0,move
 
@@ -67,7 +70,9 @@ def minimax(board, player, depth, alpha, beta):
             if alpha > beta:
                 break 
         try:
-            return min(results)
+            min_heur = min([heur[0] for heur in results])
+            min_results = [key for key in results if key[0] == min_heur]
+            return random.choice(min_results)
         except:
             return 0,move
 
