@@ -1,5 +1,5 @@
-""" Hold driver functions for MiniMax AI
-TODO: Update header comment
+""" Implementation of MiniMax algorithm for Connect 4. Works interlocked with
+main.py
 """
 
 import pygame
