@@ -61,7 +61,7 @@ def minimax(board, player, depth, alpha, beta):
             max_results = [key for key in results if key[0] == max_heur]
             return random.choice(max_results)
         except:
-            return 0,move
+            return 0, move
 
     else: #human playing, minimzer
         results = []
@@ -101,7 +101,6 @@ def calc_heuristic(board):
     enemy_threes = calc_adjacent(board, PLAYER, 3)
     enemy_twos = calc_adjacent(board, PLAYER, 2)
 
-
     #Calculate heuristic, ignore double counting
     rating = (our_middle_perc * 1050 + our_threes*(1000) + our_twos*(20) + enemy_threes*(-1100) + enemy_twos*(-10))
     return rating
@@ -124,7 +123,6 @@ def per_in_center(board):
     
     return num_tokens / 9
 
-
 def calc_adjacent(board, player, num):
     """ Calculate number of adjacent tokens of a given length
     
@@ -138,7 +136,6 @@ def calc_adjacent(board, player, num):
     """
     total = 0
 
-   
     if num == 4: #find 4 in a rows
 	    # Check horizontal locations
         for c in range(COLUMN_COUNT-3):
