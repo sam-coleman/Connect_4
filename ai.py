@@ -1,5 +1,5 @@
 """ Implementation of MiniMax algorithm for Connect 4. Works interlocked with
-main.py
+play.py
 """
 
 import pygame
@@ -9,7 +9,7 @@ import copy
 import random
 
 #import constants
-from main import (
+from play import (
     ROW_COUNT,
     COLUMN_COUNT,
     AI,

@@ -91,25 +91,6 @@ def draw_board(board):
 				pygame.draw.circle(screen, YELLOW, (int(c*SQUARESIZE+SQUARESIZE/2), height-int(r*SQUARESIZE+SQUARESIZE/2)), RADIUS)
 	pygame.display.update()
 
-def test_plots(runtime_to_plot):
-	# Data for plotting
-	fig, ax = plt.subplots()
-	moves_to_plot = []
-
-	for i in range(0, len(timing_results)):
-		moves_to_plot.append(i+1)
-
-	ax.plot(moves_to_plot, runtime_to_plot)
-	ax.scatter(moves_to_plot, runtime_to_plot, s=80, marker=">")
-
-	ax.set(xlabel='Move Number', ylabel='Runtime (s)', title='Runtime of MiniMax Over Time')
-	ax.grid()
-
-	fig.savefig("connect4cks_runtime_plot.png")
-	plt.show()
-
-
-
 if __name__ == "__main__":
 	board = create_board()
 	game_over = False
@@ -133,15 +114,10 @@ if __name__ == "__main__":
 	myfont = pygame.font.SysFont("monospace", 75)
 
 	while True:
+
+		#Close game
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
-				outputfile=open('connect4cks_output.txt','a')
-				i = 0
-				for item in timing_results:
-					i +=1
-					outputfile.writelines('(' + str(i) + ',' + str(item) + ')')
-				outputfile.close()
-				test_plots(timing_results)
 				sys.exit()
 
 		#While nobody has won
@@ -188,16 +164,8 @@ if __name__ == "__main__":
 
 			# AI Moves
 			if turn == AI and not game_over:
-				# TIMING!
-
-				start = timeit.default_timer()
 				#run MiniMax algorithm to determine move
 				heur, col = ai.minimax(np.flip(board, 0), AI, 4, -math.inf, math.inf) #move is the column
-				stop = timeit.default_timer()
-				move_number += 1
-				timing_results.append(stop - start)
-				print('-------Runtime: %s----------\n' % (stop - start))
-				# end timing
 
 				if is_valid_location(board, col): #drop if valid location
 					pygame.time.wait(500)
