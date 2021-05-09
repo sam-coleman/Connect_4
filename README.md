@@ -14,7 +14,7 @@ python3 play.py
 ```
 
 ## Final Report
-[Link to Final Report]
+[Final Report](https://github.com/sam-coleman/Connect_4/blob/main/Report.pdf)
 
 ## Contributors
 [Sam Coleman](https://github.com/sam-coleman), [Caitlin Coffey](https://github.com/caitlincoffey), and [Kate Mackowiak](https://kviiim.github.io/) for Data Structures and Algorithms at Olin College of Engineering
