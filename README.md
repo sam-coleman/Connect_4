@@ -1,5 +1,5 @@
 # Connect 4 AI
-Connect 4 MiniMax algorithm with alpha beta pruning.
+This is an implementation of a Connect 4 MiniMax algorithm with alpha-beta pruning.
 
 ## Requirements
 Run the following to install Pygame library
@@ -14,7 +14,7 @@ python3 play.py
 ```
 
 ## Final Report
-[Final Report](https://github.com/sam-coleman/Connect_4/blob/main/Report.pdf)
+[Link to Final Report](https://github.com/sam-coleman/Connect_4/blob/main/Report.pdf)
 
 ## Contributors
 [Sam Coleman](https://github.com/sam-coleman), [Caitlin Coffey](https://github.com/caitlincoffey), and [Kate Mackowiak](https://kviiim.github.io/) for Data Structures and Algorithms at Olin College of Engineering
