@@ -1,5 +1,4 @@
-"""
-Testing for Connect 4 ai
+"""Unit Testing for Connect 4 ai
 """
 
 import pytest
@@ -19,21 +18,25 @@ EMPTY = 0
 
 
 def create_board(pieces = []):
-    """
-    Create empty connect four board
+    """ Create empty connect four board
     (0,0) is the top left corner
-
-    Pieces: list with structure [[row, column, player]]
+    
+    Parameters:
+        Pieces: list with structure [[row, column, player]]
+    
+    Returns:
+        board (array): 2d array representing board state
     """
 
-    board = [[0 for i in range(COLUMN_COUNT)] for i in range(ROW_COUNT)]
+    board = [[0 for i in range(COLUMN_COUNT)] for i in range(ROW_COUNT)] #create empty board
+
+    #fill in pieces
     for piece in pieces:
         board[piece[0]][piece[1]] = piece[2]
     return board
 
 def create_all_but_one_board(player = AI):
-    """
-    Create a board filled except for top left
+    """ Create a board filled except for top left
 
     Player: int representing player
     """
