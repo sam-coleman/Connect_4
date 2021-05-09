@@ -10,7 +10,7 @@ pip3 install pygame
 ## Usage
 To play against the AI
 ```
-python3 main.py
+python3 play.py
 ```
 
 ## Final Report
